@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ListingForge</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#111009;--surf:#1c1a14;--surf2:#252318;--bdr:#3a3620;--acc:#d4a843;--txt:#ede8d8;--muted:#a09880;--dim:#6b6450;--red:#c45c3a;--grn:#5a9e72;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--txt);font-family:'IBM Plex Sans',sans-serif;font-size:14px;min-height:100vh;}
+header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;height:56px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
+.logo{font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;color:var(--acc);}
+.logo-sub{font-family:'IBM Plex Mono',monospace;font-size:.55rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;}
+.hsp{flex:1;}
+.layout{display:grid;grid-template-columns:290px 1fr;min-height:calc(100vh - 56px);}
+@media(max-width:768px){.layout{grid-template-columns:1fr;}}
+/* sidebar */
+.sb{background:var(--surf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow-y:auto;max-height:calc(100vh - 56px);}
+.ss{padding:16px;border-bottom:1px solid var(--bdr);}
+.slbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:10px;font-family:'IBM Plex Mono',monospace;}
+/* product card */
+.prod-card{padding:10px 12px;border-radius:6px;border:1px solid var(--bdr);background:var(--surf2);cursor:pointer;margin-bottom:6px;transition:all .15s;}
+.prod-card:hover,.prod-card.active{border-color:var(--acc);background:rgba(212,168,67,.06);}
+.prod-name{font-weight:600;font-size:.8rem;color:var(--txt);}
+.prod-code{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--acc);}
+.prod-meta{font-size:.65rem;color:var(--muted);margin-top:2px;}
+/* location checkboxes */
+.loc-item{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:5px;border:1px solid transparent;cursor:pointer;transition:all .12s;font-size:.72rem;user-select:none;margin-bottom:3px;}
+.loc-item:hover{border-color:var(--bdr);}
+.loc-item.chk{border-color:rgba(90,158,114,.4);background:rgba(90,158,114,.07);color:var(--grn);}
+.loc-chk{width:13px;height:13px;border:1px solid var(--bdr);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.55rem;}
+.loc-item.chk .loc-chk{background:var(--grn);border-color:var(--grn);color:#0f0f11;}
+.loc-code{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--dim);margin-left:auto;}
+/* fields */
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:5px;font-family:'IBM Plex Mono',monospace;}
+.field input,.field textarea,.field select{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:5px;padding:8px 10px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;font-size:.8rem;outline:none;transition:border-color .15s;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--acc);}
+.field textarea{resize:vertical;min-height:70px;}
+/* generate btn */
+.gen-btn{width:100%;padding:12px;background:var(--acc);color:#111009;border:none;border-radius:7px;font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .15s;}
+.gen-btn:hover{background:#e0b84d;}
+.gen-btn:disabled{background:var(--bdr);color:var(--dim);cursor:not-allowed;}
+/* panel */
+.panel{padding:24px;display:flex;flex-direction:column;gap:20px;overflow-y:auto;}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--muted);text-align:center;padding:80px 20px;min-height:400px;}
+.empty-ico{font-size:2.5rem;opacity:.25;}
+.empty-txt{font-size:.78rem;line-height:1.8;max-width:300px;}
+/* listing output card */
+.listing-card{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;overflow:hidden;}
+.listing-hdr{padding:12px 16px;background:var(--surf2);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px;}
+.listing-loc{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--acc);font-weight:500;}
+.listing-sku{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--dim);background:rgba(0,0,0,.3);padding:2px 7px;border-radius:3px;}
+.listing-hsp{flex:1;}
+.listing-body{padding:16px;}
+.listing-field{margin-bottom:14px;}
+.lf-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);font-family:'IBM Plex Mono',monospace;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.charcount{font-size:.58rem;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.3);}
+.charcount.ok{color:var(--grn);}
+.charcount.warn{color:#d4a843;}
+.charcount.over{color:var(--red);}
+.lf-content{background:var(--bg);border:1px solid var(--bdr);border-radius:6px;padding:10px 12px;font-size:.82rem;line-height:1.7;color:var(--txt);white-space:pre-wrap;word-break:break-word;font-family:'IBM Plex Sans',sans-serif;}
+.lf-content.title-box{font-size:.9rem;font-weight:600;background:rgba(212,168,67,.05);border-color:rgba(212,168,67,.2);color:var(--acc);}
+.copy-btn{padding:4px 10px;background:transparent;border:1px solid var(--bdr);border-radius:4px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:.6rem;cursor:pointer;transition:all .15s;margin-left:auto;}
+.copy-btn:hover{border-color:var(--grn);color:var(--grn);}
+.copy-btn.copied{border-color:var(--grn);color:var(--grn);}
+/* group post */
+.group-post-card{background:rgba(90,158,114,.06);border:1px solid rgba(90,158,114,.2);border-radius:8px;padding:14px;margin-top:10px;}
+.gp-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--grn);font-family:'IBM Plex Mono',monospace;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.gp-content{font-size:.8rem;line-height:1.7;color:var(--txt);white-space:pre-wrap;font-family:'IBM Plex Sans',sans-serif;}
+/* loading */
+.loading-card{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:20px;display:flex;align-items:center;gap:12px;opacity:.6;}
+.spinner{width:18px;height:18px;border:2px solid var(--bdr);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-txt{font-size:.75rem;color:var(--muted);}
+.timing-note{background:rgba(196,92,58,.08);border:1px solid rgba(196,92,58,.25);border-radius:7px;padding:12px 14px;font-size:.72rem;line-height:1.7;color:#e8a080;}
+.timing-note strong{color:var(--red);display:block;margin-bottom:4px;font-size:.75rem;}
+::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px;}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="logo">ListingForge</div>
+    <div class="logo-sub">FB Marketplace Generator</div>
+  </div>
+  <div class="hsp"></div>
+  <span id="hStatus" style="font-size:.65rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;"></span>
+</header>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<div class="sb">
+
+  <!-- Products -->
+  <div class="ss">
+    <div class="slbl">Select Product</div>
+    <div id="prodList"></div>
+  </div>
+
+  <!-- Locations -->
+  <div class="ss">
+    <div class="slbl">Generate For (select locations)</div>
+    <div id="locList"></div>
+  </div>
+
+  <!-- Session overrides -->
+  <div class="ss">
+    <div class="slbl">Session Overrides</div>
+    <div class="field"><label>Price (leave blank = default)</label><input type="text" id="oPrice" placeholder="e.g. $50"></div>
+    <div class="field"><label>Special note for AI (optional)</label><textarea id="oNote" rows="2" placeholder="e.g. mention pickup flexibility, bundle deals…"></textarea></div>
+  </div>
+
+  <!-- Generate -->
+  <div class="ss">
+    <button class="gen-btn" id="genBtn" disabled onclick="generate()">Generate Listings →</button>
+  </div>
+
+</div>
+
+<!-- PANEL -->
+<div class="panel" id="panel">
+  <div class="empty" id="emptyState">
+    <div class="empty-ico">📋</div>
+    <div class="empty-txt">Select a product and at least one location, then hit <strong style="color:var(--acc)">Generate Listings</strong>.<br><br>Each location gets a completely unique title, description, and group post — nothing repeated across listings.</div>
+  </div>
+</div>
+</div>
+
+<script>
+// ── WORKER URL ──────────────────────────────────────────────────────────────
+var WORKER = 'https://listing-forge.brett-2f8.workers.dev';
+
+// ── PRODUCTS ───────────────────────────────────────────────────────────────
+var PRODUCTS = [
+  {
+    id:'ob2',
+    name:'Oak Barrels (Standard)',
+    codeBase:'OB2',
+    price:'$50',
+    dims:[
+      '26 inches across, 17-18 inches tall, 50-60 lbs',
+      'roughly 26" wide and about 18" deep, weighs around 50 lbs',
+      'half barrel — 26 inch diameter, 17 inches tall',
+      'about two feet across and a foot and a half deep, plan on 50 lbs',
+      'measures 26" in diameter, stands 17" tall, solid at 50+ lbs',
+      '26-inch diameter half barrel, approximately 17 inches in height',
+      'two feet wide, 18 inches deep — these are heavy at 50-60 lbs',
+      'full half-barrel size: 26" across, 17" tall, 50 lbs of solid oak'
+    ],
+    material:'Real white oak from licensed distilleries. Solid wood stave construction, steel hoops.',
+    useCases:[
+      'planter for herbs, flowers, or vegetables',
+      'matched pair at a front entry',
+      'fire pit side table',
+      'succulent garden',
+      'water feature or rain barrel',
+      'firewood storage',
+      'wedding or event decor',
+      'whiskey barrel bar cart'
+    ],
+    payment:'Venmo, Cash App, Zelle, PayPal. Non-refundable deposit holds your order.',
+    notes:'The wood naturally silvers over time or seal it to keep the barrel color. Delivery available on larger orders.'
+  },
+  {
+    id:'pl',
+    name:'Half Barrel Planters (Prepped)',
+    codeBase:'PL',
+    price:'$65',
+    dims:[
+      '26 inches across, 17-18 inches tall, pre-drilled for drainage',
+      'roughly 26" wide, 18" deep, drainage holes already drilled',
+      'half barrel planter — 26 inch diameter, ready to plant',
+      'about two feet across, 18 inches deep, drain holes included',
+      'measures 26" diameter, 17" tall, fully prepped with drainage',
+      '26-inch half barrel, 17 inches tall, drain-ready',
+      'two feet wide, 18 inches deep — drainage done, just plant',
+      '26" across, 17" tall, bottom drilled and ready to go'
+    ],
+    material:'White oak half barrels with pre-drilled drainage. Steel hoops, solid stave construction.',
+    useCases:[
+      'herb garden on a patio or deck',
+      'matched pair flanking a front door',
+      'vegetable garden with good drainage',
+      'perennial flower display',
+      'succulent and cactus planter',
+      'privacy screen with tall ornamental grasses',
+      'raised bed alternative for small yards',
+      'seasonal color rotation'
+    ],
+    payment:'Venmo, Cash App, Zelle, PayPal. Deposit holds your order.',
+    notes:'Drainage holes already drilled — just add soil and plant. Can deliver on larger orders.'
+  }
+];
+
+// ── LOCATIONS ──────────────────────────────────────────────────────────────
+var LOCATIONS = [
+  {id:'bal_n', name:'Baltimore — North',     city:'Baltimore',    quad:'North',     cityCode:'BAL', area:'north Baltimore, Towson, Timonium area'},
+  {id:'bal_s', name:'Baltimore — South',     city:'Baltimore',    quad:'South',     cityCode:'BAL', area:'south Baltimore, Brooklyn, Dundalk area'},
+  {id:'bal_e', name:'Baltimore — East',      city:'Baltimore',    quad:'East',      cityCode:'BAL', area:'east Baltimore, Essex, Middle River area'},
+  {id:'bal_w', name:'Baltimore — West',      city:'Baltimore',    quad:'West',      cityCode:'BAL', area:'west Baltimore, Catonsville, Ellicott City area'},
+  {id:'bal_l', name:'Baltimore — Laurel',    city:'Baltimore',    quad:'Laurel',    cityCode:'BAL', area:'Laurel, Columbia, Jessup area'},
+  {id:'win',   name:'Winchester, VA',        city:'Winchester',   quad:'',          cityCode:'WIN', area:'Winchester VA, Front Royal, Stephens City area'},
+  {id:'way',   name:'Waynesboro, VA',        city:'Waynesboro',   quad:'',          cityCode:'WAY', area:'Waynesboro VA, Staunton, Fishersville, buyers between Waynesboro and Charlottesville'},
+  {id:'rur',   name:'Rural / Frederick MD',  city:'Frederick',    quad:'Rural',     cityCode:'RUR', area:'Frederick MD, rural western Maryland'}
+];
+
+// ── DIMENSION VARIANT TRACKING — ensures no two listings share the same dim string ──
+var usedDimIndexes = {};
+
+function getUniqueDim(product, listingIndex) {
+  var key = product.id;
+  if (!usedDimIndexes[key]) usedDimIndexes[key] = [];
+  var available = product.dims.map(function(_,i){return i;}).filter(function(i){return usedDimIndexes[key].indexOf(i)===-1;});
+  if (available.length === 0) { usedDimIndexes[key] = []; available = product.dims.map(function(_,i){return i;}); }
+  var pick = available[listingIndex % available.length];
+  usedDimIndexes[key].push(pick);
+  return product.dims[pick];
+}
+
+function shuffleUseCases(arr, seed) {
+  var a = arr.slice();
+  for (var i=a.length-1;i>0;i--){var j=Math.floor((seed*9301+49297)%233280/233280*(i+1));seed=seed*9301+49297;var t=a[i];a[i]=a[j];a[j]=t;}
+  return a;
+}
+
+// ── SKU BUILDER ────────────────────────────────────────────────────────────
+function buildSKU(product, loc) {
+  var quad = loc.quad ? '-'+loc.quad.substring(0,2).toUpperCase() : '';
+  return loc.cityCode+'-'+product.codeBase+quad;
+}
+
+// ── RENDER SIDEBAR ─────────────────────────────────────────────────────────
+(function(){
+  var pl = document.getElementById('prodList');
+  PRODUCTS.forEach(function(p,i){
+    var d=document.createElement('div');
+    d.className='prod-card'+(i===0?' active':'');
+    d.dataset.id=p.id;
+    d.innerHTML='<div class="prod-name">'+p.name+'</div><div class="prod-code">'+p.codeBase+'</div><div class="prod-meta">'+p.price+' · saved profile</div>';
+    d.addEventListener('click',function(){
+      document.querySelectorAll('.prod-card').forEach(function(x){x.classList.remove('active');});
+      d.classList.add('active');
+      updBtn();
+    });
+    pl.appendChild(d);
+  });
+
+  var ll = document.getElementById('locList');
+  LOCATIONS.forEach(function(loc){
+    var d=document.createElement('div');
+    d.className='loc-item';
+    d.dataset.id=loc.id;
+    d.innerHTML='<div class="loc-chk"></div><span>'+loc.name+'</span><span class="loc-code">'+buildSKU({codeBase:'??'},loc)+'</span>';
+    d.addEventListener('click',function(){
+      d.classList.toggle('chk');
+      d.querySelector('.loc-chk').textContent=d.classList.contains('chk')?'✓':'';
+      updBtn();
+    });
+    ll.appendChild(d);
+  });
+})();
+
+function getActiveProd(){
+  var el=document.querySelector('.prod-card.active');
+  if(!el)return null;
+  return PRODUCTS.find(function(p){return p.id===el.dataset.id;});
+}
+function getChkLocs(){
+  return Array.from(document.querySelectorAll('.loc-item.chk')).map(function(el){
+    return LOCATIONS.find(function(l){return l.id===el.dataset.id;});
+  });
+}
+function updBtn(){
+  document.getElementById('genBtn').disabled=!(getActiveProd()&&getChkLocs().length>0);
+}
+
+// ── GENERATE ───────────────────────────────────────────────────────────────
+async function generate() {
+  var prod = getActiveProd();
+  var locs = getChkLocs();
+  var oPrice = document.getElementById('oPrice').value.trim();
+  var oNote  = document.getElementById('oNote').value.trim();
+  var price  = oPrice || prod.price;
+
+  var panel = document.getElementById('panel');
+  document.getElementById('emptyState').style.display='none';
+  panel.innerHTML='';
+
+  // Timing warning if 4+ listings same day
+  if (locs.length >= 4) {
+    var warn = document.createElement('div');
+    warn.className='timing-note';
+    warn.innerHTML='<strong>⚠ Posting Strategy Reminder</strong>FB flags multiple listings posted same day same seller. Post Baltimore quadrants Wednesday, Winchester/Waynesboro Thursday. Never post all 8 on the same day — stagger across 2 days minimum.';
+    panel.appendChild(warn);
+  }
+
+  // Reset dim tracking for this generation session
+  usedDimIndexes = {};
+
+  // Generate each location in parallel
+  var promises = locs.map(function(loc, idx) {
+    return generateOne(prod, loc, price, oNote, idx);
+  });
+
+  // Show loading placeholders while running
+  var placeholders = locs.map(function(loc){
+    var card = document.createElement('div');
+    card.className='loading-card';
+    card.id='loading-'+loc.id;
+    card.innerHTML='<div class="spinner"></div><div class="loading-txt">Generating '+loc.name+'…</div>';
+    panel.appendChild(card);
+    return card;
+  });
+
+  // Replace each placeholder as results come in
+  promises.forEach(function(p, idx){
+    p.then(function(result){
+      var placeholder = placeholders[idx];
+      var card = buildListingCard(result);
+      panel.replaceChild(card, placeholder);
+    }).catch(function(err){
+      var placeholder = placeholders[idx];
+      placeholder.innerHTML='<div style="color:var(--red);font-size:.75rem;">Failed: '+err.message+'</div>';
+    });
+  });
+}
+
+async function generateOne(prod, loc, price, oNote, idx) {
+  var dimString = getUniqueDim(prod, idx);
+  var seed = Date.now() + idx * 9999;
+  var shuffledUses = shuffleUseCases(prod.useCases, seed);
+  var uses3 = shuffledUses.slice(0,3).join(', ');
+  var uses4 = shuffledUses.slice(0,4);
+  var sku = buildSKU(prod, loc);
+
+  // Build list of ALL locations being generated this session so AI avoids repeating angles
+  var allLocsThisSession = getChkLocs().map(function(l){ return l.name; }).join(', ');
+  var locsBefore = getChkLocs().slice(0, idx).map(function(l){ return l.name; }).join(', ') || 'none yet';
+
+  var titleAngle = `Choose a title angle that is UNIQUE to this specific listing for ${loc.name}. 
+This session is generating listings for: ${allLocsThisSession}.
+Listings already generated before this one: ${locsBefore}.
+
+Possible angles to draw from (pick ONE that has not been used yet this session, or invent a completely different one):
+- Scarcity lead: "Only X left…" or quantity signal first
+- Material/quality lead: "Real", "Solid", "Genuine", "Authentic" as opener
+- Use-case lead: start with the application ("Planter Ready —", "Firewood Station —")
+- Origin lead: reference distillery, cooperage, authentic sourcing
+- Value/price lead: price-forward or comparison to retail
+- Size/spec lead: lead with the measurement or weight
+- Action verb lead: start with a verb (Pick Up, Grab, Get, Score)
+- Season/timing lead: tie to current season or immediate need
+- Buyer-profile lead: speak directly to a specific buyer type (gardeners, homeowners, patio people)
+- Curiosity lead: an unexpected angle that makes someone stop scrolling
+
+The title for ${loc.name} must feel completely different from every other listing in this session. Under 70 chars. No city name. No ALL CAPS. No cheesy phrases.`;
+
+  // Description must express dims in assigned unique way, use cases in shuffled order
+  var prompt = `You are writing a Facebook Marketplace listing for a seller in ${loc.area}.
+
+PRODUCT: ${prod.name}
+SKU: ${sku}
+PRICE: ${price}
+DIMENSIONS (use EXACTLY this phrasing — do not change the wording): "${dimString}"
+MATERIAL: ${prod.material}
+USE CASES to mention (in THIS order): ${uses4.map(function(u,i){return (i+1)+'. '+u;}).join(', ')}
+PAYMENT: ${prod.payment}
+NOTES: ${prod.notes}
+${oNote ? 'SELLER NOTE: '+oNote : ''}
+
+TITLE INSTRUCTION: ${titleAngle} Do NOT mention the city name in the title. Make it feel natural and buyer-focused, not like a template. No ALL CAPS. No "—" unless used intentionally.
+
+DESCRIPTION REQUIREMENTS:
+- Professional, confident tone. NOT casual or chatty. Write like someone who knows their product and their buyer.
+- Open with a single strong hook sentence (1 line max). Not a greeting, not "Looking for…"
+- Then a short product paragraph: dimensions (use the exact string given), material, construction quality.
+- Then a use case section — short lines or brief list, in the order given above.
+- Then pickup/delivery and payment info.
+- End with the SKU code: ${sku}
+- Total length: 120-180 words. Tight. No fluff.
+- NO phrases like "Look no further", "Perfect for any", "Don't miss out", "Great deal", "You won't be disappointed"
+- The dimension string must appear verbatim — do not paraphrase it
+
+SEPARATE GROUP POST (after the listing, separated by ===GROUP===):
+Write a 2-3 sentence buy/sell group post for the ${loc.area}. 
+- Casual but not desperate. Lead with what it is and price. 
+- Include pickup location area naturally. 
+- End with a soft CTA. Under 60 words.
+
+Respond with TITLE on first line, then blank line, then DESCRIPTION, then ===GROUP===, then GROUP POST. Nothing else.`;
+
+  var response = await fetch(WORKER, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:600,
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+
+  if (!response.ok) throw new Error('API error '+response.status);
+  var data = await response.json();
+  var raw = data.content.map(function(b){return b.text||'';}).join('');
+
+  // Parse output
+  var parts = raw.split('===GROUP===');
+  var mainPart = parts[0].trim();
+  var groupPart = (parts[1]||'').trim();
+  var lines = mainPart.split('\n');
+  var title = lines[0].replace(/^TITLE:?\s*/i,'').trim();
+  var description = lines.slice(1).join('\n').trim();
+
+  // Ensure SKU is in description
+  if (description.indexOf(sku) === -1) description += '\n\n'+sku;
+
+  return {prod:prod, loc:loc, sku:sku, price:price, title:title, description:description, groupPost:groupPart, dimString:dimString};
+}
+
+// ── BUILD CARD ──────────────────────────────────────────────────────────────
+function buildListingCard(r) {
+  var card = document.createElement('div');
+  card.className='listing-card';
+
+  var titleLen = r.title.length;
+  var titleClass = titleLen <= 70 ? 'ok' : titleLen <= 80 ? 'warn' : 'over';
+
+  card.innerHTML = `
+    <div class="listing-hdr">
+      <span class="listing-loc">${r.loc.name}</span>
+      <span class="listing-sku">${r.sku}</span>
+      <div class="listing-hsp"></div>
+      <span style="font-size:.65rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;">${r.price}</span>
+    </div>
+    <div class="listing-body">
+      <div class="listing-field">
+        <div class="lf-label">
+          Title
+          <span class="charcount ${titleClass}">${titleLen} chars</span>
+          <button class="copy-btn" onclick="copyText(this,'${escQ(r.title)}')">Copy</button>
+        </div>
+        <div class="lf-content title-box">${escH(r.title)}</div>
+      </div>
+      <div class="listing-field">
+        <div class="lf-label">
+          Description
+          <button class="copy-btn" onclick="copyField(this,'desc-${r.loc.id}')">Copy</button>
+        </div>
+        <div class="lf-content" id="desc-${r.loc.id}">${escH(r.description)}</div>
+      </div>
+      ${r.groupPost ? `
+      <div class="group-post-card">
+        <div class="gp-label">Group Post <button class="copy-btn" style="border-color:rgba(90,158,114,.3)" onclick="copyField(this,'gp-${r.loc.id}')">Copy</button></div>
+        <div class="gp-content" id="gp-${r.loc.id}">${escH(r.groupPost)}</div>
+      </div>` : ''}
+    </div>`;
+  return card;
+}
+
+// ── UTILS ───────────────────────────────────────────────────────────────────
+function escH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escQ(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+
+function copyText(btn, text) {
+  text = text.replace(/\\'/g,"'").replace(/&quot;/g,'"');
+  navigator.clipboard.writeText(text).then(function(){
+    btn.textContent='Copied ✓'; btn.classList.add('copied');
+    setTimeout(function(){btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+function copyField(btn, id) {
+  var el = document.getElementById(id);
+  if(!el)return;
+  navigator.clipboard.writeText(el.innerText).then(function(){
+    btn.textContent='Copied ✓'; btn.classList.add('copied');
+    setTimeout(function(){btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  });
+}
+</script>
+</body>
+</html>
