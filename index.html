@@ -6,29 +6,45 @@
 <title>ListingForge</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#111009;--surf:#1c1a14;--surf2:#252318;--bdr:#3a3620;--acc:#d4a843;--txt:#ede8d8;--muted:#a09880;--dim:#6b6450;--red:#c45c3a;--grn:#5a9e72;}
+:root{--bg:#111009;--surf:#1c1a14;--surf2:#252318;--bdr:#3a3620;--acc:#d4a843;--txt:#ede8d8;--muted:#a09880;--dim:#6b6450;--red:#c45c3a;--grn:#5a9e72;--blue:#4a90d9;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--txt);font-family:'IBM Plex Sans',sans-serif;font-size:14px;min-height:100vh;}
 header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;height:56px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
 .logo{font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;color:var(--acc);}
 .logo-sub{font-family:'IBM Plex Mono',monospace;font-size:.55rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;}
 .hsp{flex:1;}
-.layout{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 56px);}
+.layout{display:grid;grid-template-columns:320px 1fr;min-height:calc(100vh - 56px);}
 @media(max-width:768px){.layout{grid-template-columns:1fr;}}
 .sb{background:var(--surf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow-y:auto;max-height:calc(100vh - 56px);}
 .ss{padding:14px 16px;border-bottom:1px solid var(--bdr);}
-.slbl{font-size:.57rem;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:8px;font-family:'IBM Plex Mono',monospace;}
+.slbl{font-size:.57rem;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:8px;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;justify-content:space-between;}
 .prod-card{padding:9px 11px;border-radius:6px;border:1px solid var(--bdr);background:var(--surf2);cursor:pointer;margin-bottom:5px;transition:all .15s;}
 .prod-card:hover,.prod-card.active{border-color:var(--acc);background:rgba(212,168,67,.06);}
 .prod-name{font-weight:600;font-size:.78rem;}
 .prod-code{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--acc);}
 .prod-price{font-size:.65rem;color:var(--muted);}
-.loc-item{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:5px;border:1px solid transparent;cursor:pointer;transition:all .12s;font-size:.7rem;user-select:none;margin-bottom:2px;}
-.loc-item:hover{border-color:var(--bdr);}
-.loc-item.chk{border-color:rgba(90,158,114,.4);background:rgba(90,158,114,.07);color:var(--grn);}
+/* locations */
+.loc-item{border:1px solid var(--bdr);border-radius:6px;margin-bottom:5px;overflow:hidden;}
+.loc-header{display:flex;align-items:center;gap:7px;padding:7px 10px;cursor:pointer;transition:all .12s;user-select:none;}
+.loc-header:hover{background:rgba(255,255,255,.03);}
+.loc-item.chk .loc-header{background:rgba(90,158,114,.07);border-color:rgba(90,158,114,.4);}
 .lck{width:13px;height:13px;border:1px solid var(--bdr);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.55rem;}
 .loc-item.chk .lck{background:var(--grn);border-color:var(--grn);color:#0f0f11;}
-.loc-code{font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--dim);margin-left:auto;}
+.loc-name{font-size:.72rem;flex:1;}
+.loc-sku{font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--dim);}
+.loc-edit-btn{font-size:.6rem;color:var(--dim);padding:2px 6px;border:1px solid var(--bdr);border-radius:3px;background:transparent;cursor:pointer;font-family:'IBM Plex Mono',monospace;}
+.loc-edit-btn:hover{color:var(--acc);border-color:var(--acc);}
+/* location editor */
+.loc-editor{padding:10px;background:var(--bg);border-top:1px solid var(--bdr);display:none;}
+.loc-editor.open{display:block;}
+.le-field{margin-bottom:8px;}
+.le-field label{display:block;font-size:.57rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:3px;font-family:'IBM Plex Mono',monospace;}
+.le-field input,.le-field textarea,.le-field select{width:100%;background:var(--surf);border:1px solid var(--bdr);border-radius:4px;padding:6px 8px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;font-size:.73rem;outline:none;transition:border-color .15s;}
+.le-field input:focus,.le-field textarea:focus{border-color:var(--acc);}
+.le-field textarea{resize:vertical;min-height:50px;}
+.le-save{padding:5px 12px;background:var(--grn);color:#0f0f11;border:none;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:.62rem;cursor:pointer;font-weight:500;}
+.le-save:hover{background:#5dc98a;}
+/* fields */
 .field{margin-bottom:10px;}
 .field label{display:block;font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:4px;font-family:'IBM Plex Mono',monospace;}
 .field input,.field textarea{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:5px;padding:7px 9px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;font-size:.78rem;outline:none;transition:border-color .15s;}
@@ -37,6 +53,7 @@ header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;
 .gen-btn{width:100%;padding:11px;background:var(--acc);color:#111009;border:none;border-radius:7px;font-family:'Playfair Display',serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .15s;}
 .gen-btn:hover{background:#e0b84d;}
 .gen-btn:disabled{background:var(--bdr);color:var(--dim);cursor:not-allowed;}
+/* panel */
 .panel{padding:20px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;}
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--muted);text-align:center;padding:80px 20px;min-height:400px;}
 .empty-ico{font-size:2.5rem;opacity:.25;}
@@ -46,7 +63,6 @@ header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;
 .listing-loc{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--acc);font-weight:500;}
 .listing-sku{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--dim);background:rgba(0,0,0,.3);padding:2px 7px;border-radius:3px;}
 .listing-hsp{flex:1;}
-.listing-price{font-size:.65rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
 .listing-body{padding:14px;}
 .lf{margin-bottom:12px;}
 .lf-lbl{font-size:.57rem;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);font-family:'IBM Plex Mono',monospace;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
@@ -72,7 +88,6 @@ header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;
 <header>
   <div><div class="logo">ListingForge</div><div class="logo-sub">FB Marketplace Generator</div></div>
   <div class="hsp"></div>
-  <span id="hStatus" style="font-size:.63rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;"></span>
 </header>
 <div class="layout">
 <div class="sb">
@@ -81,13 +96,15 @@ header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;
     <div id="prodList"></div>
   </div>
   <div class="ss">
-    <div class="slbl">Locations</div>
+    <div class="slbl">
+      Locations
+      <span style="font-size:.57rem;color:var(--dim);">click ✎ to edit settings</span>
+    </div>
     <div id="locList"></div>
   </div>
   <div class="ss">
-    <div class="slbl">Session Overrides</div>
-    <div class="field"><label>Price override</label><input type="text" id="oPrice" placeholder="leave blank = product default"></div>
-    <div class="field"><label>Note for AI</label><textarea id="oNote" rows="2" placeholder="e.g. mention bundle deals, pickup flexibility…"></textarea></div>
+    <div class="slbl">Session Note for AI (optional)</div>
+    <div class="field"><textarea id="oNote" rows="2" placeholder="e.g. mention fire pit season, note stock is limited…"></textarea></div>
   </div>
   <div class="ss">
     <button class="gen-btn" id="genBtn" disabled onclick="generate()">Generate Listings →</button>
@@ -96,155 +113,151 @@ header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;
 <div class="panel" id="panel">
   <div class="empty" id="emptyState">
     <div class="empty-ico">📋</div>
-    <div class="empty-txt">Select a product and locations, then hit <strong style="color:var(--acc)">Generate Listings</strong>.<br><br>Each location gets a completely unique title, different dimension phrasing, shuffled use cases, and its own group post.</div>
+    <div class="empty-txt">Select a product and locations, then hit <strong style="color:var(--acc)">Generate Listings</strong>.<br><br>Each location gets a completely unique title, description, and group post. Edit per-location settings by clicking ✎ next to any location.</div>
   </div>
+  <div id="ra"></div>
 </div>
 </div>
 
 <script>
+var WORKER = 'https://listing-forge.brett-2f8.workers.dev';
 
-
-// ── FULL PRODUCT CATALOG ────────────────────────────────────────────────────
+// ── PRODUCTS ────────────────────────────────────────────────────────────────
 var PRODUCTS = [
   {
-    id:'ob2', name:'Weathered Oak Whiskey Barrels', code:'OB2', price:'$80',
-    condition:'Used - Good', material:'White Oak Wood', color:'Brown / Natural Oak',
-    brand:'Various distilleries',
+    id:'ob2', name:'White Oak Whiskey Barrels (Full)', code:'OB2',
+    priceEach:'$85',
+    description:'Full-size uncut whiskey barrel, upright, as-is from licensed distilleries. These are complete barrels — not split, not modified. 53-gallon white oak with steel hoops, original char inside. Sourced directly from working distilleries — real barrels that actually aged bourbon, not decorative replicas.',
     dims:[
-      '26 inches across, 36 inches tall, around 100 lbs',
-      'roughly 26" wide at the belly, 36" tall — plan on 100 lbs',
-      'full barrel: 26-inch diameter, 36 inches tall, solid at 100 lbs',
-      'about two feet across and three feet tall — these are heavy, bring help',
-      'measures 26" in diameter, stands 36" tall, 100 lbs of solid white oak',
-      '26" diameter, 36" height — at 100 lbs you will want a second set of hands',
-      'full-size half barrel: 26 across, 36 tall, approximately 100 lbs',
-      'two feet wide, three feet tall — 100 lbs of real white oak'
+      '26 inches in diameter, 36 inches tall, around 100 lbs',
+      'roughly 26" wide at the belly, stands 36" tall — plan on 100 lbs',
+      'full 53-gallon barrel: 26" diameter, 36" tall, solid at 100 lbs',
+      'about two feet across and three feet tall — these are heavy, bring a hand truck',
+      '26" diameter, 36" height — 100 lbs of solid white oak and steel',
+      'measures 26 inches across, 36 inches tall, approximately 100 lbs',
+      'full-size bourbon barrel, 26" wide, 36" tall, 100 lbs',
+      'two feet across, three feet tall — 100 lbs of real distillery oak'
     ],
-    sourcing:'Sourced directly from licensed distilleries and wineries. Real white oak, not decorative replicas.',
     useCases:[
-      'man cave or bourbon room centerpiece',
-      'matched pair flanking a front entry — looks like you spent real money',
+      'bourbon room or home bar centerpiece',
+      'front porch or entry statement piece',
+      'outdoor bar top or whiskey tasting station',
       'fire pit side table',
-      'drill drainage holes and you have the best planter you have ever owned',
-      'outdoor bar cart base or whiskey tasting station',
-      'she-shed or workshop decor',
+      'man cave feature piece',
       'wedding or event backdrop',
-      'rain barrel conversion with spigot',
-      'raised garden bed alternative',
-      'front porch statement piece'
+      'drill the top and use it as a planter',
+      'rain barrel conversion with a spigot kit',
+      'she-shed or workshop decor',
+      'cut it in half and get two planters for the price of one barrel'
     ],
-    payment:'Venmo, Cash App, Zelle, PayPal. Non-refundable deposit holds your order.',
-    delivery:'Pickup in Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro. Delivery available on orders of 3 or more.',
-    notes:'Bring a friend — 100 lbs. Two people strongly recommended for transport.',
-    category:'Home Decor / Garden'
+    material:'White oak stave construction, steel hoops, original distillery char.',
+    sourcing:'Sourced directly from licensed distilleries. Real barrels that aged bourbon — not decorative replicas.',
+    payment:['Venmo','Cash App','Zelle','PayPal'],
+    notes:'Bring a hand truck and a friend — 100 lbs. These are heavy but worth it.'
   },
   {
-    id:'ob1', name:"Maker's Mark White Oak Barrels", code:'OB1', price:'$100',
-    condition:'Used - Good', material:'White Oak Wood', color:'Brown / Natural Oak',
-    brand:"Maker's Mark (original distillery markings intact — not stickers or stencils)",
+    id:'ob1', name:"Maker's Mark Barrels (Full)", code:'OB1',
+    priceEach:'$110',
+    description:"Full-size Maker's Mark whiskey barrels, original branded markings from the cooperage — not stickers, not stencils, burned into the wood. These came out of the Maker's Mark distillery. Same full barrel as OB2 but with authenticated Maker's Mark provenance.",
     dims:[
-      "26 inches across, 36 inches tall, 100 lbs — Maker's Mark branded",
-      "roughly 26\" wide, 36\" tall, around 100 lbs with original Maker's Mark markings",
-      "full barrel: 26-inch diameter, 36 inches tall — branded with Maker's Mark distillery marks",
-      "about two feet across and three feet tall, 100 lbs, original branding intact",
-      "26\" diameter, 36\" tall, 100 lbs — authentic Maker's Mark stamp on every barrel",
+      "26\" diameter, 36\" tall, 100 lbs — original Maker's Mark markings",
+      "roughly 26\" wide, 36\" tall, around 100 lbs with Maker's Mark branding intact",
+      "full barrel: 26-inch diameter, 36 inches tall, branded with Maker's Mark cooperage marks",
+      "about two feet across and three feet tall, 100 lbs, original distillery branding",
+      "26\" diameter, 36\" tall, 100 lbs — authentic Maker's Mark stamp, not a replica",
       "measures 26\" across, stands 36\" tall at 100 lbs — Maker's Mark markings are original",
-      "two feet wide, three feet tall, 100 lbs — not a replica, these came out of the distillery",
-      "26\" diameter, 36\" height, approximately 100 lbs, Maker's Mark branding throughout"
+      "two feet wide, three feet tall, 100 lbs — these came out of the Maker's Mark distillery",
+      "26\" diameter, 36\" height, approximately 100 lbs, original Maker's Mark cooperage branding"
     ],
-    sourcing:"Authentic Maker's Mark distillery barrels — original branded markings from the cooperage, not stickers or stencils.",
     useCases:[
-      "home bar or bourbon room statement piece",
+      "home bar or bourbon room with real provenance",
       "Maker's Mark collector display",
-      "upscale patio or outdoor entertaining setup",
-      "man cave centerpiece with real distillery provenance",
-      "restaurant or bar decor",
+      "upscale patio or outdoor entertaining centerpiece",
+      "restaurant or bar decor with authentic branding",
       "wedding ceremony backdrop or photo prop",
-      "gift for a serious bourbon person",
-      "matched pair at a front entry",
+      "gift for a serious bourbon collector",
+      "man cave feature with documented distillery origin",
       "fire pit surround or side table",
-      "she-shed or reading nook feature"
+      "front entry statement piece",
+      "split it and get two branded planters"
     ],
-    payment:'Venmo, Cash App, Zelle, PayPal. Non-refundable deposit holds your order.',
-    delivery:'Pickup in Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro. Delivery available on orders of 3 or more.',
-    notes:"Original Maker's Mark branding. Bring a friend — 100 lbs. These move fast.",
-    category:'Home Decor / Collectibles'
+    material:"White oak stave construction, steel hoops, original Maker's Mark cooperage branding burned into wood.",
+    sourcing:"Authentic Maker's Mark distillery barrels — original branded markings from the cooperage, not stickers or stencils.",
+    payment:['Venmo','Cash App','Zelle','PayPal'],
+    notes:"Original Maker's Mark branding. Bring a hand truck — 100 lbs. These move fast."
   },
   {
-    id:'op', name:'Whiskey Barrel Planters (Prepped)', code:'OP', price:'',
-    condition:'Used - Good', material:'White Oak Wood', color:'Brown / Natural Oak',
-    brand:'',
+    id:'op', name:'Half Barrel Planters', code:'OP',
+    priceEach:'$50 each planter',
+    description:'White oak whiskey barrels split in half — each half makes one planter. Sold individually. Price is per planter, not per barrel. You can buy as many as you need. Solid white oak construction, steel hoop, approximately 26 inches across and 18 inches deep. You drill your own drainage holes. These are the real thing — not the cheap decorative planters from the garden center.',
     dims:[
-      '26 inches across, 18 inches deep',
-      'roughly 26" wide, 18" deep',
-      'half barrel planter: 26-inch diameter, 18 inches tall',
-      'about two feet across and 18 inches deep',
-      'measures 26" in diameter, 18" tall',
-      '26" diameter, 18" height',
-      'two feet wide, 18 inches deep',
-      '26" across, 18" tall'
+      '26 inches across, 18 inches deep — solid white oak half barrel',
+      'roughly 26" wide, 18" deep — one half of a real whiskey barrel',
+      'half barrel: 26-inch diameter, 18 inches tall, solid white oak',
+      'about two feet across and 18 inches deep, steel hoop intact',
+      'measures 26" in diameter, 18" tall — real distillery oak',
+      '26" diameter, 18" depth — half of a 53-gallon whiskey barrel',
+      'two feet wide, 18 inches deep — solid oak and steel construction',
+      '26" across, 18" tall — genuine whiskey barrel half, not a replica'
     ],
-    sourcing:'White oak half barrels from licensed distilleries. Real oak, not decorative replicas.',
     useCases:[
-      'herb garden on a patio or deck',
+      'herb garden — fits a full kitchen herb collection',
       'matched pair flanking a front door',
-      'vegetable garden with natural drainage',
+      'vegetable garden with serious depth for root vegetables',
       'perennial flower display that lasts for years',
-      'succulents and drought-tolerant plants',
-      'privacy screen with tall ornamental grasses',
-      'raised bed alternative for small yards',
-      'seasonal color rotation'
+      'succulents or drought-tolerant plants',
+      'privacy screen base with tall ornamental grasses',
+      'raised bed alternative for small yards or patios',
+      'seasonal color rotation — move them around as needed'
     ],
-    payment:'Venmo, Cash App, Zelle, PayPal. Deposit holds your order.',
-    delivery:'Pickup in Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro. Delivery available on orders of 3 or more.',
-    notes:'Drill drainage holes before planting. Solid white oak construction.',
-    category:'Garden / Outdoor'
+    material:'White oak half barrel, steel hoop, solid stave construction. Drill your own drainage holes.',
+    sourcing:'Split from real whiskey barrels sourced from licensed distilleries.',
+    payment:['Venmo','Cash App','Zelle','PayPal'],
+    notes:'Price is per planter (one half barrel). Drill drainage holes before planting. Buy as many as you need.'
   },
   {
-    id:'rb', name:'Rain Barrels', code:'RB', price:'',
-    condition:'Used - Good', material:'Plastic / Food Grade', color:'Various',
-    brand:'',
+    id:'rb', name:'Rain Barrels (55 Gal)', code:'RB',
+    priceEach:'',
+    description:'Food grade certified 55-gallon barrels suited for rainwater collection and water storage.',
     dims:[
-      '55 gallon capacity, standard drum size',
-      'holds 55 gallons — standard barrel dimensions',
-      '55-gallon drum, food grade',
-      'full 55-gallon capacity, standard pickup/truck-friendly size',
-      'approximately 35 inches tall, 23 inches wide, 55 gallon capacity',
-      '55 gallons, fits in a standard pickup bed',
-      'standard 55-gallon drum dimensions',
-      '23" diameter, 35" tall — 55 gallon capacity'
+      '55 gallon capacity, standard drum dimensions',
+      'holds 55 gallons — 23" wide, 35" tall',
+      '55-gallon drum, food grade certified',
+      'full 55-gallon capacity, fits in a standard pickup bed',
+      'approximately 35 inches tall, 23 inches wide, 55 gallon',
+      '55 gallons — standard barrel size, truck-friendly',
+      '23" diameter, 35" tall — 55 gallon capacity',
+      'standard 55-gallon drum, food grade'
     ],
-    sourcing:'Food grade certified barrels suited for rainwater collection and water storage.',
     useCases:[
       'rainwater collection from downspouts',
-      'garden irrigation water storage',
+      'garden irrigation storage',
       'livestock water supply',
       'homestead or farm water storage',
       'emergency water preparedness',
       'compost tea brewing',
-      'off-grid water system component',
+      'off-grid water system',
       'drought-season garden watering'
     ],
-    payment:'Venmo, Cash App, Zelle, PayPal.',
-    delivery:'Pickup in Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro. Delivery available on orders of 3 or more.',
-    notes:'Add spigot for easy access. Food grade certified.',
-    category:'Farm / Garden'
+    material:'Food grade plastic, 55-gallon capacity.',
+    sourcing:'Food grade certified barrels.',
+    payment:['Venmo','Cash App','Zelle','PayPal'],
+    notes:'Food grade certified. Add a spigot for easy access.'
   },
   {
-    id:'fsb1', name:'Food Grade Steel Barrels', code:'FSB1', price:'',
-    condition:'Used - Good', material:'Steel', color:'Silver/Grey',
-    brand:'',
+    id:'fsb1', name:'Food Grade Steel Barrels (55 Gal)', code:'FSB1',
+    priceEach:'',
+    description:'Heavy gauge food grade certified 55-gallon steel drums from industrial sources.',
     dims:[
       '55 gallon steel drum, food grade certified',
       'standard 55-gallon steel drum — food grade',
-      '55 gallons, heavy gauge steel, food grade certified',
-      'full 55-gallon capacity steel drum — food grade rated',
-      'approximately 35 inches tall, 23 inches wide, 55 gallon steel',
+      '55 gallons, heavy gauge steel, food grade',
+      'full 55-gallon steel drum — food grade rated',
+      'approximately 35" tall, 23" wide, 55 gallon steel',
       '55-gallon heavy steel drum, food grade certification',
-      'standard drum: 23" wide, 35" tall, 55-gallon capacity',
-      '55 gallons of heavy gauge steel — food grade rated throughout'
+      '23" wide, 35" tall, 55-gallon steel capacity',
+      '55 gallons of heavy gauge steel — food grade throughout'
     ],
-    sourcing:'Food grade certified steel drums from industrial sources.',
     useCases:[
       'water storage for farm or homestead',
       'fuel or fluid storage',
@@ -255,26 +268,25 @@ var PRODUCTS = [
       'rainwater collection',
       'bulk dry goods storage'
     ],
-    payment:'Venmo, Cash App, Zelle, PayPal.',
-    delivery:'Pickup in Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro. Delivery available on orders of 3 or more.',
-    notes:'Food grade certified. Great for farm, homestead, or emergency prep.',
-    category:'Farm / Industrial'
+    material:'Heavy gauge steel, food grade certified.',
+    sourcing:'Food grade certified steel drums from industrial sources.',
+    payment:['Venmo','Cash App','Zelle','PayPal'],
+    notes:'Food grade certified. Great for farm, homestead, or emergency prep.'
   },
   {
-    id:'fsbb', name:'Burn Barrels', code:'FSBB', price:'',
-    condition:'Used - Good', material:'Steel', color:'Black/Grey',
-    brand:'',
+    id:'fsbb', name:'Burn Barrels (55 Gal Steel)', code:'FSBB',
+    priceEach:'',
+    description:'Heavy steel 55-gallon drums ready for use as burn barrels.',
     dims:[
-      '55 gallon steel drum, ready to use as burn barrel',
-      'standard 55-gallon steel drum — burn barrel ready',
-      '55-gallon heavy steel drum prepped for burning',
-      'full 55-gallon capacity, heavy steel, burn barrel ready',
-      'approximately 35 inches tall, 23 inches wide, steel burn barrel',
-      '55-gallon steel drum — use it as-is for yard waste burning',
-      'standard drum dimensions: 23" wide, 35" tall — ready to burn',
-      '55 gallons, heavy steel — burn barrel right out of your truck'
+      '55 gallon steel drum, burn barrel ready',
+      'standard 55-gallon steel drum — ready to use',
+      '55-gallon heavy steel drum',
+      'full 55-gallon capacity, heavy steel',
+      'approximately 35" tall, 23" wide, steel',
+      '55-gallon steel drum — use as-is',
+      '23" wide, 35" tall — 55 gallon steel',
+      '55 gallons, heavy steel'
     ],
-    sourcing:'Heavy steel drums suited for yard waste and burn barrel use.',
     useCases:[
       'yard waste and leaf burning',
       'paper and cardboard disposal',
@@ -283,26 +295,25 @@ var PRODUCTS = [
       'brush pile disposal',
       'rural property waste management'
     ],
-    payment:'Venmo, Cash App, Zelle, PayPal.',
-    delivery:'Pickup in Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro. Delivery available on orders of 3 or more.',
-    notes:'Check local regulations on open burning. Ready to use as-is.',
-    category:'Farm / Outdoor'
+    material:'Heavy steel drum.',
+    sourcing:'Heavy steel drums suited for yard waste burning.',
+    payment:['Venmo','Cash App','Zelle','PayPal'],
+    notes:'Check local regulations on open burning. Ready to use as-is.'
   },
   {
-    id:'pp1', name:'HD Plastic Planters', code:'PP1', price:'',
-    condition:'Used - Good', material:'Heavy Duty Plastic', color:'Various',
-    brand:'',
+    id:'pp1', name:'HD Plastic Planters', code:'PP1',
+    priceEach:'',
+    description:'Heavy duty commercial grade plastic planters from nursery and landscaping sources. Built heavier than anything at a big box store.',
     dims:[
-      'heavy duty commercial plastic, various sizes available',
-      'commercial grade plastic planters, multiple sizes in stock',
-      'HD plastic, built for commercial nursery use — sizes vary',
-      'heavy gauge commercial plastic, various dimensions available',
-      'built heavier than anything at a big box store — sizes available',
+      'commercial grade plastic, various sizes available',
+      'HD plastic, nursery grade — sizes vary, ask what is in stock',
+      'heavy gauge commercial plastic, multiple sizes available',
+      'built heavier than big box store planters — sizes available',
       'commercial nursery-grade plastic, several sizes in stock',
-      'heavy duty plastic construction, ask about sizes available',
-      'multiple sizes available — all commercial nursery grade plastic'
+      'heavy duty plastic, ask about current sizes',
+      'multiple sizes — all commercial nursery grade',
+      'commercial spec plastic planters, sizes vary'
     ],
-    sourcing:'Heavy duty commercial and industrial plastic planters from nursery and landscaping sources.',
     useCases:[
       'patio or deck container gardening',
       'flower and annual displays',
@@ -313,91 +324,116 @@ var PRODUCTS = [
       'nursery and greenhouse use',
       'seasonal color rotation'
     ],
-    payment:'Venmo, Cash App, Zelle, PayPal. Bulk pricing available.',
-    delivery:'Pickup in Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro. Delivery available on orders of 3 or more.',
-    notes:'Heavy duty commercial grade — built tougher than retail store planters. Bulk pricing available.',
-    category:'Garden / Outdoor'
+    material:'Heavy duty commercial grade plastic.',
+    sourcing:'Commercial and nursery sources.',
+    payment:['Venmo','Cash App','Zelle','PayPal'],
+    notes:'Commercial grade — tougher than retail planters. Bulk pricing available.'
   },
   {
-    id:'pp2', name:'HD Plastic Planters Large', code:'PP2', price:'',
-    condition:'Used - Good', material:'Heavy Duty Plastic', color:'Various',
-    brand:'',
+    id:'pp2', name:'HD Plastic Planters Large', code:'PP2',
+    priceEach:'',
+    description:'Large format heavy duty commercial grade plastic planters for trees, large shrubs, and commercial installs.',
     dims:[
-      'large commercial plastic planters, heavy duty construction',
-      'oversized commercial grade plastic — built for large plants and trees',
+      'large commercial plastic planters, heavy duty',
+      'oversized commercial grade plastic — built for large plants',
       'large format HD plastic, commercial nursery grade',
-      'big planters: commercial grade, heavy duty, various large sizes',
-      'large commercial plastic planters, ask about specific dimensions',
-      'oversized nursery-grade plastic, several large sizes available',
-      'heavy duty large plastic — commercial spec, various sizes in stock',
-      'large format, heavy gauge commercial plastic — multiple sizes available'
+      'big commercial planters, heavy duty, various large sizes',
+      'large commercial plastic, ask about specific dimensions',
+      'oversized nursery-grade plastic, large sizes available',
+      'heavy duty large plastic — commercial spec',
+      'large format heavy gauge commercial plastic'
     ],
-    sourcing:'Large commercial and industrial plastic planters from nursery and landscaping sources.',
     useCases:[
-      'large tree planting and container growing',
+      'large tree container growing',
       'shrub and ornamental grass containers',
       'commercial landscaping and property staging',
       'nursery and greenhouse production',
       'large estate or property plantings',
-      'bulk container gardening installations',
       'privacy screen plantings',
-      'commercial patio and entrance plantings'
+      'commercial patio and entrance plantings',
+      'bulk container gardening installs'
     ],
-    payment:'Venmo, Cash App, Zelle, PayPal. Bulk pricing available.',
-    delivery:'Pickup in Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro. Delivery available on orders of 3 or more.',
-    notes:'Large size — great for trees, shrubs, commercial use. Bulk pricing available.',
-    category:'Garden / Commercial'
+    material:'Heavy duty commercial grade plastic.',
+    sourcing:'Large commercial and nursery sources.',
+    payment:['Venmo','Cash App','Zelle','PayPal'],
+    notes:'Large size — great for trees, shrubs, commercial use. Bulk pricing available.'
   }
 ];
 
-// ── LOCATIONS ───────────────────────────────────────────────────────────────
+// ── DEFAULT LOCATION SETTINGS ────────────────────────────────────────────────
+var DEFAULT_LOC_SETTINGS = {
+  bal_n:  { pickup:'Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro', delivery:'Delivery available in the Baltimore area for an additional charge — message for a quote', includeDelivery:true  },
+  bal_s:  { pickup:'Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro', delivery:'Delivery available in the Baltimore area for an additional charge — message for a quote', includeDelivery:true  },
+  bal_e:  { pickup:'Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro', delivery:'Delivery available in the Baltimore area for an additional charge — message for a quote', includeDelivery:true  },
+  bal_w:  { pickup:'Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro', delivery:'Delivery available in the Baltimore area for an additional charge — message for a quote', includeDelivery:true  },
+  bal_l:  { pickup:'Woodlawn, off Security Blvd and I-695 — easy highway access from anywhere in the metro', delivery:'Delivery available in the Baltimore area for an additional charge — message for a quote', includeDelivery:true  },
+  way:    { pickup:'Waynesboro VA — easy access from I-64', delivery:'', includeDelivery:false },
+  way_e:  { pickup:'Waynesboro VA east side — easy access from I-64', delivery:'', includeDelivery:false },
+  way_n:  { pickup:'Waynesboro VA north side — easy access from I-64', delivery:'', includeDelivery:false },
+  win:    { pickup:'', delivery:'', includeDelivery:false },
+  rur:    { pickup:'', delivery:'', includeDelivery:false }
+};
+
+// ── LOCATIONS ────────────────────────────────────────────────────────────────
 var LOCATIONS = [
-  {id:'bal_n',  name:'Baltimore — North',    cityCode:'BAL', sub:'NL1', area:'north Baltimore, Towson, Timonium, Lutherville area'},
-  {id:'bal_s',  name:'Baltimore — South',    cityCode:'BAL', sub:'NL2', area:'south Baltimore, Brooklyn, Dundalk, Glen Burnie area'},
-  {id:'bal_e',  name:'Baltimore — East',     cityCode:'BAL', sub:'NL3', area:'east Baltimore, Essex, Middle River, Rosedale area'},
-  {id:'bal_w',  name:'Baltimore — West',     cityCode:'BAL', sub:'NL4', area:'west Baltimore, Catonsville, Ellicott City, Woodlawn area'},
-  {id:'bal_l',  name:'Baltimore — Laurel',   cityCode:'BAL', sub:'NL5', area:'Laurel, Columbia, Jessup, Savage area'},
-  {id:'win',    name:'Winchester, VA',       cityCode:'WIN', sub:'NL1', area:'Winchester VA, Front Royal, Stephens City, Berryville area', delivery:'Pickup location TBD for Winchester — message to arrange.'},
-  {id:'way',    name:'Waynesboro, VA',       cityCode:'WAY', sub:'NL1', area:'Waynesboro VA, Staunton, Fishersville — buyers between Waynesboro and Charlottesville', delivery:'Pickup location TBD for Waynesboro — message to arrange.'},
-  {id:'rur',    name:'Rural / Frederick MD', cityCode:'RUR', sub:'NL1', area:'Frederick MD, Hagerstown, rural western Maryland'}
+  {id:'bal_n', name:'Baltimore — North',    cityCode:'BAL', skuSuffix:'N1'},
+  {id:'bal_s', name:'Baltimore — South',    cityCode:'BAL', skuSuffix:'S2'},
+  {id:'bal_e', name:'Baltimore — East',     cityCode:'BAL', skuSuffix:'E3'},
+  {id:'bal_w', name:'Baltimore — West',     cityCode:'BAL', skuSuffix:'W4'},
+  {id:'bal_l', name:'Baltimore — Laurel',   cityCode:'BAL', skuSuffix:'L5'},
+  {id:'way',   name:'Waynesboro, VA',       cityCode:'WAY', skuSuffix:'W1'},
+  {id:'way_e', name:'Waynesboro, VA — East',  cityCode:'WAY', skuSuffix:'E2'},
+  {id:'way_n', name:'Waynesboro, VA — North', cityCode:'WAY', skuSuffix:'N3'},
+  {id:'win',   name:'Winchester, VA',       cityCode:'WIN', skuSuffix:'W1'},
+  {id:'rur',   name:'Rural / Frederick MD', cityCode:'RUR', skuSuffix:'R1'}
 ];
 
-// ── DIMENSION TRACKING — fully dynamic, scales to any number of locations ────
-// Picks randomly from unused variants. When all are used, reshuffles randomly.
-// Never cycles predictably regardless of how many locations you add.
+function buildSKU(prod,loc){ return loc.cityCode+'-'+prod.code+'-'+loc.skuSuffix; }
+
+// ── LOCATION SETTINGS (localStorage) ────────────────────────────────────────
+function getLocSettings(locId){
+  var saved = localStorage.getItem('lf_loc_'+locId);
+  if(saved){ try{ return JSON.parse(saved); }catch(e){} }
+  return JSON.parse(JSON.stringify(DEFAULT_LOC_SETTINGS[locId]||{pickup:'',delivery:'',includeDelivery:false}));
+}
+function saveLocSettings(locId, settings){
+  localStorage.setItem('lf_loc_'+locId, JSON.stringify(settings));
+}
+
+// ── DIMENSION TRACKING ───────────────────────────────────────────────────────
 var usedDimIdx = {};
-function getUniqueDim(prod) {
-  if (!usedDimIdx[prod.id]) usedDimIdx[prod.id] = [];
-  var used = usedDimIdx[prod.id];
-  var avail = prod.dims.map(function(_,i){return i;}).filter(function(i){return used.indexOf(i)===-1;});
-  if (!avail.length) { usedDimIdx[prod.id]=[]; avail=prod.dims.map(function(_,i){return i;}); }
-  var pick = avail[Math.floor(Math.random()*avail.length)];
+function getUniqueDim(prod){
+  if(!usedDimIdx[prod.id]) usedDimIdx[prod.id]=[];
+  var used=usedDimIdx[prod.id];
+  var avail=prod.dims.map(function(_,i){return i;}).filter(function(i){return used.indexOf(i)===-1;});
+  if(!avail.length){ usedDimIdx[prod.id]=[]; avail=prod.dims.map(function(_,i){return i;}); }
+  var pick=avail[Math.floor(Math.random()*avail.length)];
   used.push(pick);
   return prod.dims[pick];
 }
 
-function shuffleArr(arr, seed) {
+function shuffleArr(arr,seed){
   var a=arr.slice();
   for(var i=a.length-1;i>0;i--){var j=Math.floor((seed*9301+49297)%233280/233280*(i+1));seed=seed*9301+49297;var t=a[i];a[i]=a[j];a[j]=t;}
   return a;
 }
 
-function buildSKU(prod, loc) {
-  return loc.cityCode+'-'+prod.code+'-'+loc.sub;
-}
-
-// ── RENDER SIDEBAR ──────────────────────────────────────────────────────────
+// ── RENDER SIDEBAR ───────────────────────────────────────────────────────────
 (function(){
   var pl=document.getElementById('prodList');
   PRODUCTS.forEach(function(p,i){
     var d=document.createElement('div');
     d.className='prod-card'+(i===0?' active':'');
     d.dataset.id=p.id;
-    d.innerHTML='<div class="prod-name">'+p.name+'</div><div style="display:flex;gap:8px;margin-top:3px;"><span class="prod-code">'+p.code+'</span><span class="prod-price">'+(p.price||'price TBD')+'</span></div>';
+    d.innerHTML='<div class="prod-name">'+p.name+'</div>'
+      +'<div style="display:flex;gap:8px;margin-top:3px;">'
+      +'<span class="prod-code">'+p.code+'</span>'
+      +'<span class="prod-price">'+(p.priceEach||'price TBD')+'</span>'
+      +'</div>';
     d.addEventListener('click',function(){
       document.querySelectorAll('.prod-card').forEach(function(x){x.classList.remove('active');});
       d.classList.add('active');
-      updateLocCodes();
+      updateLocSKUs();
       updBtn();
     });
     pl.appendChild(d);
@@ -405,29 +441,68 @@ function buildSKU(prod, loc) {
 
   var ll=document.getElementById('locList');
   LOCATIONS.forEach(function(loc){
-    var d=document.createElement('div');
-    d.className='loc-item';
-    d.dataset.id=loc.id;
-    d.innerHTML='<div class="lck"></div><span>'+loc.name+'</span><span class="loc-code" id="lcode-'+loc.id+'">--</span>';
-    d.addEventListener('click',function(){
-      d.classList.toggle('chk');
-      d.querySelector('.lck').textContent=d.classList.contains('chk')?'✓':'';
+    var settings=getLocSettings(loc.id);
+    var wrap=document.createElement('div');
+    wrap.className='loc-item';
+    wrap.dataset.id=loc.id;
+
+    var hdr=document.createElement('div');
+    hdr.className='loc-header';
+    hdr.innerHTML='<div class="lck"></div>'
+      +'<span class="loc-name">'+loc.name+'</span>'
+      +'<span class="loc-sku" id="lsku-'+loc.id+'">--</span>'
+      +'<button class="loc-edit-btn" data-loc="'+loc.id+'">✎</button>';
+
+    // Toggle check on header click (not edit button)
+    hdr.addEventListener('click',function(e){
+      if(e.target.classList.contains('loc-edit-btn')) return;
+      wrap.classList.toggle('chk');
+      hdr.querySelector('.lck').textContent=wrap.classList.contains('chk')?'✓':'';
       updBtn();
     });
-    ll.appendChild(d);
+
+    // Editor panel
+    var editor=document.createElement('div');
+    editor.className='loc-editor';
+    editor.id='editor-'+loc.id;
+    editor.innerHTML='<div class="le-field"><label>Pickup location text</label>'
+      +'<textarea id="le-pickup-'+loc.id+'" rows="2">'+escH(settings.pickup||'')+'</textarea></div>'
+      +'<div class="le-field"><label>Delivery note (leave blank to omit)</label>'
+      +'<input type="text" id="le-delivery-'+loc.id+'" value="'+escH(settings.delivery||'')+'"></div>'
+      +'<button class="le-save" data-loc="'+loc.id+'">Save</button>';
+
+    // Edit button toggle
+    hdr.querySelector('.loc-edit-btn').addEventListener('click',function(e){
+      e.stopPropagation();
+      editor.classList.toggle('open');
+    });
+
+    // Save button
+    editor.querySelector('.le-save').addEventListener('click',function(){
+      var s={
+        pickup: document.getElementById('le-pickup-'+loc.id).value.trim(),
+        delivery: document.getElementById('le-delivery-'+loc.id).value.trim(),
+        includeDelivery: !!document.getElementById('le-delivery-'+loc.id).value.trim()
+      };
+      saveLocSettings(loc.id, s);
+      editor.classList.remove('open');
+    });
+
+    wrap.appendChild(hdr);
+    wrap.appendChild(editor);
+    ll.appendChild(wrap);
   });
 
-  updateLocCodes();
+  updateLocSKUs();
 })();
 
-function updateLocCodes() {
-  var prod = getActiveProd();
+function updateLocSKUs(){
+  var prod=getActiveProd();
   LOCATIONS.forEach(function(loc){
-    var el = document.getElementById('lcode-'+loc.id);
-    if (el) el.textContent = prod ? buildSKU(prod, loc) : '--';
+    var el=document.getElementById('lsku-'+loc.id);
+    if(el) el.textContent=prod?buildSKU(prod,loc):'--';
   });
 }
-
 function getActiveProd(){
   var el=document.querySelector('.prod-card.active');
   if(!el)return null;
@@ -439,129 +514,136 @@ function getChkLocs(){
   });
 }
 function updBtn(){
-  document.getElementById('genBtn').disabled=!(getActiveProd()&&getChkLocs().length>0);
+  var btn=document.getElementById('genBtn');
+  btn.disabled=!(getActiveProd()&&getChkLocs().length>0);
+  if(!btn.disabled) btn.textContent='Generate Listings →';
 }
 
-// ── GENERATE ────────────────────────────────────────────────────────────────
-async function generate() {
+// ── GENERATE ─────────────────────────────────────────────────────────────────
+async function generate(){
   var prod=getActiveProd(), locs=getChkLocs();
   if(!prod||!locs.length) return;
-
   var btn=document.getElementById('genBtn');
-  btn.disabled=true;
-  btn.textContent='Generating…';
-
-  var oPrice=document.getElementById('oPrice').value.trim();
+  btn.disabled=true; btn.textContent='Generating…';
   var oNote=document.getElementById('oNote').value.trim();
-  var price=oPrice||(prod.price&&prod.price.length?prod.price:'');
-
   var panel=document.getElementById('panel');
-  // Clear results area but keep emptyState in DOM
   var ra=document.getElementById('ra');
-  if(ra) ra.innerHTML='';
-  else {
-    // First run — emptyState still exists, hide it and create ra
-    var es=document.getElementById('emptyState');
-    if(es) es.style.display='none';
-    ra=document.createElement('div');
-    ra.id='ra';
-    panel.appendChild(ra);
-  }
+  ra.innerHTML='';
+  document.getElementById('emptyState').style.display='none';
   usedDimIdx={};
 
   if(locs.length>=4){
     var w=document.createElement('div');
     w.className='timing-note';
-    w.innerHTML='<strong>⚠ Posting Reminder</strong>Never post all locations same day — FB flags it. Baltimore quadrants Wednesday, Winchester/Waynesboro Thursday. Stagger across 2 days minimum.';
+    w.innerHTML='<strong>⚠ Posting Reminder</strong>Never post all locations same day — FB flags it. Stagger across 2 days minimum. Baltimore Wednesday, Waynesboro/Winchester Thursday.';
     ra.appendChild(w);
   }
 
   var allLocNames=locs.map(function(l){return l.name;}).join(', ');
-
-  // Create placeholders
   var cards=locs.map(function(loc){
     var card=document.createElement('div');
     card.className='loading-card';
-    card.id='lc-'+loc.id;
     card.innerHTML='<div class="spinner"></div><div class="loading-txt">Generating '+loc.name+'…</div>';
     ra.appendChild(card);
     return card;
   });
 
-  // Generate all, replace placeholders as each completes
   var promises=locs.map(function(loc,idx){
-    return generateOne(prod,loc,price,oNote,idx,allLocNames,locs).then(function(result){
+    return generateOne(prod,loc,oNote,idx,allLocNames,locs).then(function(result){
       var newCard=buildCard(result);
       ra.replaceChild(newCard,cards[idx]);
     }).catch(function(err){
-      cards[idx].innerHTML='<div style="color:var(--red);font-size:.73rem;">Failed for '+loc.name+': '+err.message+'</div>';
+      cards[idx].innerHTML='<div style="color:var(--red);font-size:.73rem;padding:4px;">Failed for '+loc.name+': '+err.message+'</div>';
     });
   });
 
-  // Re-enable button when all done
   Promise.all(promises).then(function(){
     btn.disabled=false;
     btn.textContent='Generate Listings →';
   });
 }
 
-async function generateOne(prod,loc,price,oNote,idx,allLocNames,allLocs) {
+async function generateOne(prod,loc,oNote,idx,allLocNames,allLocs){
   var dimString=getUniqueDim(prod);
   var seed=Date.now()+idx*7919;
   var shuffledUses=shuffleArr(prod.useCases,seed);
-  var uses=shuffledUses.slice(0,4);
+  var uses=shuffledUses.slice(0,5);
   var sku=buildSKU(prod,loc);
+  var settings=getLocSettings(loc.id);
   var locsBeforeThis=allLocs.slice(0,idx).map(function(l){return l.name;}).join(', ')||'none yet';
+  var paymentOrder=shuffleArr(prod.payment,seed+1234);
 
-  var titleInstruction='Choose a title angle that is COMPLETELY UNIQUE for this listing ('+loc.name+'). '
-    +'This session covers: '+allLocNames+'. Already generated for: '+locsBeforeThis+'. '
-    +'Draw from these angles OR invent your own — the key is no two titles in this session should lead with the same approach: '
-    +'scarcity lead, material/quality lead, use-case lead, origin/provenance lead, price/value lead, size/spec lead, action verb lead, season lead, buyer-profile lead, curiosity lead. '
-    +'Under 70 characters. No city name. No ALL CAPS. No clichés.';
+  // Build title instruction
+  var titleInstruction='Write a title for the '+loc.name+' listing that is STRUCTURALLY DIFFERENT from every other listing in this session.\n'
+    +'Session locations: '+allLocNames+'\n'
+    +'Already generated for: '+locsBeforeThis+'\n'
+    +'HARD RULES:\n'
+    +'1. Do NOT start with any word already used to start another title this session.\n'
+    +'2. Do NOT include the SKU code in the title.\n'
+    +'3. No two titles can share the same opening word or phrase.\n'
+    +'4. Under 70 characters. No city name. No ALL CAPS.\n'
+    +'5. Think about what angle would stop a DIFFERENT type of buyer scrolling in this specific area.\n'
+    +'Available angles (use each only once per session, or invent new ones):\n'
+    +'- Lead with a sensory detail ("Still Smells Like Bourbon", "Charred Oak From a Real Distillery")\n'
+    +'- Lead with a use case ("Fire Pit Side Table Ready", "Plant It Today")\n'
+    +'- Lead with scarcity or quantity ("3 Left", "Going Fast")\n'
+    +'- Lead with provenance ("Straight From a Licensed Distillery")\n'
+    +'- Lead with size/spec ("53-Gallon White Oak Barrel")\n'
+    +'- Lead with value ("Cheaper Than Anywhere Online")\n'
+    +'- Lead with action ("Pick Up Today", "Grab One Before They Go")\n'
+    +'- Lead with the buyer ("For the Bourbon Lover", "Gardeners — Real Oak Planter")\n'
+    +'- Lead with contrast ("Not a Replica — Real Distillery Barrel")\n'
+    +'- Lead with a question or curiosity hook\n';
 
-  var prompt='You are writing a Facebook Marketplace listing.\n\n'
+  var prompt='Write a Facebook Marketplace listing. Be specific, confident, and genuinely varied. No filler. No clichés.\n\n'
     +'PRODUCT: '+prod.name+'\n'
     +'SKU: '+sku+'\n'
-    +'PRICE: '+(price||'message for pricing — no phone calls')+'\n'
-    +'CONDITION: '+prod.condition+'\n'
+    +'PRICE NOTE: Do NOT include a price. Do include the line "Price is for each." near the top.\n'
+    +'PRODUCT DESCRIPTION: '+prod.description+'\n'
+    +'DIMENSIONS — use EXACTLY this wording verbatim, do not rephrase: "'+dimString+'"\n'
     +'MATERIAL: '+prod.material+'\n'
-    +(prod.brand?'BRAND: '+prod.brand+'\n':'')
-    +'DIMENSIONS — use EXACTLY this wording verbatim: "'+dimString+'"\n'
     +'SOURCING: '+prod.sourcing+'\n'
-    +'USE CASES in this exact order: '+uses.map(function(u,i){return (i+1)+'. '+u;}).join(' | ')+'\n'
-    +'PAYMENT: '+prod.payment+'\n'
-    +'DELIVERY: '+prod.delivery+'\n'
+    +'USE CASES to mention (in this shuffled order): '+uses.map(function(u,i){return (i+1)+'. '+u;}).join(' | ')+'\n'
+    +'PAYMENT (in this order): '+paymentOrder.join(', ')+'\n'
     +'NOTES: '+prod.notes+'\n'
-    +(oNote?'SELLER NOTE: '+oNote+'\n':'')
-    +'\nTITLE INSTRUCTION: '+titleInstruction+'\n'
-    +'\nDESCRIPTION RULES:\n'
-    +'- Professional, confident tone. Not casual or chatty. Writes like someone who knows their product.\n'
-    +'- Open with ONE strong hook sentence — not a greeting, not "Looking for X", not "Great deal". Something specific and compelling.\n'
-    +'- Short product paragraph: use the EXACT dimension string given above verbatim, mention material and sourcing naturally.\n'
-    +'- Use cases: mention them in the order given. 1-2 lines, specific not generic.\n'
-    +'- Pickup, delivery, and payment info woven in naturally.\n'
-    +'- End with SKU on its own line: '+sku+'\n'
-    +'- Total: 120-180 words. Tight. No filler.\n'
-    +'- NEVER use: "Look no further", "Perfect for any", "Don\'t miss out", "Great deal", "You won\'t be disappointed", "Amazing", "Gorgeous"\n'
-    +'- NEVER say "Woodlawn" or "storage unit" in any listing\n'
-    +'- Pickup location for Baltimore listings: easy off I-695 and Security Blvd, Baltimore. Can also just say "west Baltimore" or give the address: 1701 Whitehead Rd, Baltimore MD 21207\n'
-    +'- The EXACT dimension string must appear verbatim — do not rephrase it.\n'
-    +'\nGROUP POST (separate, for Facebook buy/sell groups in '+loc.area+'):\n'
-    +'Write 2-3 sentences. Casual but not desperate. Lead with what it is and the price. Include general pickup area naturally. End with soft CTA. Under 60 words.\n'
-    +'\nFormat your response EXACTLY as:\n'
-    +'TITLE: [title here]\n\n'
-    +'[description here]\n\n'
+    +(settings.pickup?'PICKUP LOCATION: '+settings.pickup+'\n':'')
+    +(settings.delivery?'DELIVERY NOTE: '+settings.delivery+'\n':'')
+    +(oNote?'SELLER NOTE FOR AI: '+oNote+'\n':'')
+    +'\nTITLE INSTRUCTION:\n'+titleInstruction
+    +'\nDESCRIPTION STRUCTURE:\n'
+    +'1. PICKUP LINE FIRST: If pickup location is provided, make it the very first line. Natural, not robotic.\n'
+    +'2. "Price is for each." on its own line immediately after pickup.\n'
+    +'3. One strong hook sentence — specific, not generic. Not a greeting.\n'
+    +'4. Product paragraph: exact dimension string verbatim, material, sourcing. Make it sound real.\n'
+    +'5. Use cases — vary the structure. Sometimes a short list, sometimes flowing prose, sometimes one punchy line per use. Do not use the same structure across listings.\n'
+    +(settings.delivery?'6. Delivery note naturally woven in.\n':'')
+    +'7. Payment methods in the order given.\n'
+    +'8. SKU on its own line at the bottom.\n'
+    +'\nWRITING RULES:\n'
+    +'- Professional and direct. Not casual, not corporate.\n'
+    +'- REAL variance in sentence structure, paragraph length, and tone across listings. Two listings should not read like the same template with words swapped.\n'
+    +'- No "Look no further", "Perfect for any", "Don\'t miss out", "Amazing", "Gorgeous", "Great deal"\n'
+    +'- No deposit language of any kind.\n'
+    +'- No delivery language unless the DELIVERY NOTE above is provided.\n'
+    +'- The exact dimension string must appear verbatim — do not rephrase it.\n'
+    +'- Length: 150-250 words. Longer is fine if it adds real information. Do not pad.\n'
+    +'\nGROUP POST:\n'
+    +'Write a short Facebook buy/sell group post for '+loc.name+' area buyers.\n'
+    +'2-3 sentences. Casual but not desperate. What it is, that there is no price (they message you), where pickup is. Under 60 words.\n'
+    +'\nFormat EXACTLY as:\n'
+    +'TITLE: [title — no SKU]\n\n'
+    +'[description]\n\n'
     +'===GROUP===\n'
-    +'[group post here]';
+    +'[group post]';
 
-  var res=await fetch('https://listing-forge.brett-2f8.workers.dev',{
+  var res=await fetch(WORKER,{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:650,messages:[{role:'user',content:prompt}]})
+    body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})
   });
+  if(!res.ok) throw new Error('Worker '+res.status);
   var data=await res.json();
-  if(!res.ok) throw new Error('API '+(data.error&&data.error.message||res.status));
-  if(!data.content) throw new Error('Bad response: '+JSON.stringify(data).slice(0,100));
+  if(!data.content) throw new Error(JSON.stringify(data).slice(0,120));
   var raw=data.content.map(function(b){return b.text||'';}).join('');
 
   var parts=raw.split('===GROUP===');
@@ -572,11 +654,11 @@ async function generateOne(prod,loc,price,oNote,idx,allLocNames,allLocs) {
   var desc=lines.slice(1).join('\n').trim();
   if(desc.indexOf(sku)===-1) desc+='\n\n'+sku;
 
-  return {prod:prod,loc:loc,sku:sku,price:price,title:title,desc:desc,group:group};
+  return {prod:prod,loc:loc,sku:sku,title:title,desc:desc,group:group};
 }
 
-// ── BUILD CARD ──────────────────────────────────────────────────────────────
-function buildCard(r) {
+// ── BUILD CARD ───────────────────────────────────────────────────────────────
+function buildCard(r){
   var card=document.createElement('div');
   card.className='listing-card';
   var tl=r.title.length;
@@ -585,7 +667,6 @@ function buildCard(r) {
     +'<span class="listing-loc">'+r.loc.name+'</span>'
     +'<span class="listing-sku">'+r.sku+'</span>'
     +'<div class="listing-hsp"></div>'
-    +'<span class="listing-price">'+r.price+'</span>'
     +'</div>'
     +'<div class="listing-body">'
     +'<div class="lf"><div class="lf-lbl">Title <span class="cc '+tc+'">'+tl+' chars</span><button class="copy-btn" data-copy="title-'+r.loc.id+'">Copy</button></div>'
