@@ -13,254 +13,418 @@ header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;
 .logo{font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;color:var(--acc);}
 .logo-sub{font-family:'IBM Plex Mono',monospace;font-size:.55rem;color:var(--dim);letter-spacing:.15em;text-transform:uppercase;}
 .hsp{flex:1;}
-.layout{display:grid;grid-template-columns:290px 1fr;min-height:calc(100vh - 56px);}
+.layout{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 56px);}
 @media(max-width:768px){.layout{grid-template-columns:1fr;}}
-/* sidebar */
 .sb{background:var(--surf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow-y:auto;max-height:calc(100vh - 56px);}
-.ss{padding:16px;border-bottom:1px solid var(--bdr);}
-.slbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:10px;font-family:'IBM Plex Mono',monospace;}
-/* product card */
-.prod-card{padding:10px 12px;border-radius:6px;border:1px solid var(--bdr);background:var(--surf2);cursor:pointer;margin-bottom:6px;transition:all .15s;}
+.ss{padding:14px 16px;border-bottom:1px solid var(--bdr);}
+.slbl{font-size:.57rem;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:8px;font-family:'IBM Plex Mono',monospace;}
+.prod-card{padding:9px 11px;border-radius:6px;border:1px solid var(--bdr);background:var(--surf2);cursor:pointer;margin-bottom:5px;transition:all .15s;}
 .prod-card:hover,.prod-card.active{border-color:var(--acc);background:rgba(212,168,67,.06);}
-.prod-name{font-weight:600;font-size:.8rem;color:var(--txt);}
-.prod-code{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--acc);}
-.prod-meta{font-size:.65rem;color:var(--muted);margin-top:2px;}
-/* location checkboxes */
-.loc-item{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:5px;border:1px solid transparent;cursor:pointer;transition:all .12s;font-size:.72rem;user-select:none;margin-bottom:3px;}
+.prod-name{font-weight:600;font-size:.78rem;}
+.prod-code{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--acc);}
+.prod-price{font-size:.65rem;color:var(--muted);}
+.loc-item{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:5px;border:1px solid transparent;cursor:pointer;transition:all .12s;font-size:.7rem;user-select:none;margin-bottom:2px;}
 .loc-item:hover{border-color:var(--bdr);}
 .loc-item.chk{border-color:rgba(90,158,114,.4);background:rgba(90,158,114,.07);color:var(--grn);}
-.loc-chk{width:13px;height:13px;border:1px solid var(--bdr);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.55rem;}
-.loc-item.chk .loc-chk{background:var(--grn);border-color:var(--grn);color:#0f0f11;}
-.loc-code{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--dim);margin-left:auto;}
-/* fields */
-.field{margin-bottom:12px;}
-.field label{display:block;font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:5px;font-family:'IBM Plex Mono',monospace;}
-.field input,.field textarea,.field select{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:5px;padding:8px 10px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;font-size:.8rem;outline:none;transition:border-color .15s;}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--acc);}
-.field textarea{resize:vertical;min-height:70px;}
-/* generate btn */
-.gen-btn{width:100%;padding:12px;background:var(--acc);color:#111009;border:none;border-radius:7px;font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .15s;}
+.lck{width:13px;height:13px;border:1px solid var(--bdr);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.55rem;}
+.loc-item.chk .lck{background:var(--grn);border-color:var(--grn);color:#0f0f11;}
+.loc-code{font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--dim);margin-left:auto;}
+.field{margin-bottom:10px;}
+.field label{display:block;font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:4px;font-family:'IBM Plex Mono',monospace;}
+.field input,.field textarea{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:5px;padding:7px 9px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;font-size:.78rem;outline:none;transition:border-color .15s;}
+.field input:focus,.field textarea:focus{border-color:var(--acc);}
+.field textarea{resize:vertical;min-height:60px;}
+.gen-btn{width:100%;padding:11px;background:var(--acc);color:#111009;border:none;border-radius:7px;font-family:'Playfair Display',serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .15s;}
 .gen-btn:hover{background:#e0b84d;}
 .gen-btn:disabled{background:var(--bdr);color:var(--dim);cursor:not-allowed;}
-/* panel */
-.panel{padding:24px;display:flex;flex-direction:column;gap:20px;overflow-y:auto;}
+.panel{padding:20px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;}
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--muted);text-align:center;padding:80px 20px;min-height:400px;}
 .empty-ico{font-size:2.5rem;opacity:.25;}
-.empty-txt{font-size:.78rem;line-height:1.8;max-width:300px;}
-/* listing output card */
+.empty-txt{font-size:.75rem;line-height:1.8;max-width:320px;}
 .listing-card{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;overflow:hidden;}
-.listing-hdr{padding:12px 16px;background:var(--surf2);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px;}
-.listing-loc{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--acc);font-weight:500;}
-.listing-sku{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--dim);background:rgba(0,0,0,.3);padding:2px 7px;border-radius:3px;}
+.listing-hdr{padding:11px 15px;background:var(--surf2);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px;}
+.listing-loc{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--acc);font-weight:500;}
+.listing-sku{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--dim);background:rgba(0,0,0,.3);padding:2px 7px;border-radius:3px;}
 .listing-hsp{flex:1;}
-.listing-body{padding:16px;}
-.listing-field{margin-bottom:14px;}
-.lf-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);font-family:'IBM Plex Mono',monospace;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
-.charcount{font-size:.58rem;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.3);}
-.charcount.ok{color:var(--grn);}
-.charcount.warn{color:#d4a843;}
-.charcount.over{color:var(--red);}
-.lf-content{background:var(--bg);border:1px solid var(--bdr);border-radius:6px;padding:10px 12px;font-size:.82rem;line-height:1.7;color:var(--txt);white-space:pre-wrap;word-break:break-word;font-family:'IBM Plex Sans',sans-serif;}
-.lf-content.title-box{font-size:.9rem;font-weight:600;background:rgba(212,168,67,.05);border-color:rgba(212,168,67,.2);color:var(--acc);}
-.copy-btn{padding:4px 10px;background:transparent;border:1px solid var(--bdr);border-radius:4px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:.6rem;cursor:pointer;transition:all .15s;margin-left:auto;}
-.copy-btn:hover{border-color:var(--grn);color:var(--grn);}
-.copy-btn.copied{border-color:var(--grn);color:var(--grn);}
-/* group post */
-.group-post-card{background:rgba(90,158,114,.06);border:1px solid rgba(90,158,114,.2);border-radius:8px;padding:14px;margin-top:10px;}
-.gp-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--grn);font-family:'IBM Plex Mono',monospace;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
-.gp-content{font-size:.8rem;line-height:1.7;color:var(--txt);white-space:pre-wrap;font-family:'IBM Plex Sans',sans-serif;}
-/* loading */
-.loading-card{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:20px;display:flex;align-items:center;gap:12px;opacity:.6;}
-.spinner{width:18px;height:18px;border:2px solid var(--bdr);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+.listing-price{font-size:.65rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;}
+.listing-body{padding:14px;}
+.lf{margin-bottom:12px;}
+.lf-lbl{font-size:.57rem;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);font-family:'IBM Plex Mono',monospace;margin-bottom:4px;display:flex;align-items:center;gap:8px;}
+.cc{font-size:.57rem;padding:2px 6px;border-radius:3px;background:rgba(0,0,0,.3);}
+.cc.ok{color:var(--grn);}.cc.warn{color:#d4a843;}.cc.over{color:var(--red);}
+.lf-content{background:var(--bg);border:1px solid var(--bdr);border-radius:6px;padding:9px 11px;font-size:.8rem;line-height:1.7;color:var(--txt);white-space:pre-wrap;word-break:break-word;}
+.lf-content.title-box{font-size:.88rem;font-weight:600;background:rgba(212,168,67,.05);border-color:rgba(212,168,67,.2);color:var(--acc);}
+.copy-btn{padding:3px 9px;background:transparent;border:1px solid var(--bdr);border-radius:4px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:.58rem;cursor:pointer;transition:all .15s;margin-left:auto;}
+.copy-btn:hover,.copy-btn.copied{border-color:var(--grn);color:var(--grn);}
+.gpc{background:rgba(90,158,114,.06);border:1px solid rgba(90,158,114,.2);border-radius:7px;padding:12px;margin-top:8px;}
+.gpl{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--grn);font-family:'IBM Plex Mono',monospace;margin-bottom:7px;display:flex;align-items:center;justify-content:space-between;}
+.gp-content{font-size:.78rem;line-height:1.7;white-space:pre-wrap;}
+.loading-card{background:var(--surf);border:1px solid var(--bdr);border-radius:10px;padding:18px;display:flex;align-items:center;gap:12px;}
+.spinner{width:16px;height:16px;border:2px solid var(--bdr);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loading-txt{font-size:.75rem;color:var(--muted);}
-.timing-note{background:rgba(196,92,58,.08);border:1px solid rgba(196,92,58,.25);border-radius:7px;padding:12px 14px;font-size:.72rem;line-height:1.7;color:#e8a080;}
-.timing-note strong{color:var(--red);display:block;margin-bottom:4px;font-size:.75rem;}
-::-webkit-scrollbar{width:4px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px;}
+.loading-txt{font-size:.72rem;color:var(--muted);}
+.timing-note{background:rgba(196,92,58,.08);border:1px solid rgba(196,92,58,.25);border-radius:7px;padding:11px 13px;font-size:.7rem;line-height:1.7;color:#e8a080;}
+.timing-note strong{color:var(--red);display:block;margin-bottom:3px;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px;}
 </style>
 </head>
 <body>
 <header>
-  <div>
-    <div class="logo">ListingForge</div>
-    <div class="logo-sub">FB Marketplace Generator</div>
-  </div>
+  <div><div class="logo">ListingForge</div><div class="logo-sub">FB Marketplace Generator</div></div>
   <div class="hsp"></div>
-  <span id="hStatus" style="font-size:.65rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;"></span>
+  <span id="hStatus" style="font-size:.63rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;"></span>
 </header>
-
 <div class="layout">
-<!-- SIDEBAR -->
 <div class="sb">
-
-  <!-- Products -->
   <div class="ss">
-    <div class="slbl">Select Product</div>
+    <div class="slbl">Product</div>
     <div id="prodList"></div>
   </div>
-
-  <!-- Locations -->
   <div class="ss">
-    <div class="slbl">Generate For (select locations)</div>
+    <div class="slbl">Locations</div>
     <div id="locList"></div>
   </div>
-
-  <!-- Session overrides -->
   <div class="ss">
     <div class="slbl">Session Overrides</div>
-    <div class="field"><label>Price (leave blank = default)</label><input type="text" id="oPrice" placeholder="e.g. $50"></div>
-    <div class="field"><label>Special note for AI (optional)</label><textarea id="oNote" rows="2" placeholder="e.g. mention pickup flexibility, bundle deals…"></textarea></div>
+    <div class="field"><label>Price override</label><input type="text" id="oPrice" placeholder="leave blank = product default"></div>
+    <div class="field"><label>Note for AI</label><textarea id="oNote" rows="2" placeholder="e.g. mention bundle deals, pickup flexibility…"></textarea></div>
   </div>
-
-  <!-- Generate -->
   <div class="ss">
     <button class="gen-btn" id="genBtn" disabled onclick="generate()">Generate Listings →</button>
   </div>
-
 </div>
-
-<!-- PANEL -->
 <div class="panel" id="panel">
   <div class="empty" id="emptyState">
     <div class="empty-ico">📋</div>
-    <div class="empty-txt">Select a product and at least one location, then hit <strong style="color:var(--acc)">Generate Listings</strong>.<br><br>Each location gets a completely unique title, description, and group post — nothing repeated across listings.</div>
+    <div class="empty-txt">Select a product and locations, then hit <strong style="color:var(--acc)">Generate Listings</strong>.<br><br>Each location gets a completely unique title, different dimension phrasing, shuffled use cases, and its own group post.</div>
   </div>
 </div>
 </div>
 
 <script>
-// ── WORKER URL ──────────────────────────────────────────────────────────────
 var WORKER = 'https://listing-forge.brett-2f8.workers.dev';
 
-// ── PRODUCTS ───────────────────────────────────────────────────────────────
+// ── FULL PRODUCT CATALOG ────────────────────────────────────────────────────
 var PRODUCTS = [
   {
-    id:'ob2',
-    name:'Oak Barrels (Standard)',
-    codeBase:'OB2',
-    price:'$50',
+    id:'ob2', name:'Weathered Oak Whiskey Barrels', code:'OB2', price:'$80',
+    condition:'Used - Good', material:'White Oak Wood', color:'Brown / Natural Oak',
+    brand:'Various distilleries',
     dims:[
-      '26 inches across, 17-18 inches tall, 50-60 lbs',
-      'roughly 26" wide and about 18" deep, weighs around 50 lbs',
-      'half barrel — 26 inch diameter, 17 inches tall',
-      'about two feet across and a foot and a half deep, plan on 50 lbs',
-      'measures 26" in diameter, stands 17" tall, solid at 50+ lbs',
-      '26-inch diameter half barrel, approximately 17 inches in height',
-      'two feet wide, 18 inches deep — these are heavy at 50-60 lbs',
-      'full half-barrel size: 26" across, 17" tall, 50 lbs of solid oak'
+      '26 inches across, 36 inches tall, around 100 lbs',
+      'roughly 26" wide at the belly, 36" tall — plan on 100 lbs',
+      'full barrel: 26-inch diameter, 36 inches tall, solid at 100 lbs',
+      'about two feet across and three feet tall — these are heavy, bring help',
+      'measures 26" in diameter, stands 36" tall, 100 lbs of solid white oak',
+      '26" diameter, 36" height — at 100 lbs you will want a second set of hands',
+      'full-size half barrel: 26 across, 36 tall, approximately 100 lbs',
+      'two feet wide, three feet tall — 100 lbs of real white oak'
     ],
-    material:'Real white oak from licensed distilleries. Solid wood stave construction, steel hoops.',
+    sourcing:'Sourced directly from licensed distilleries and wineries. Real white oak, not decorative replicas.',
     useCases:[
-      'planter for herbs, flowers, or vegetables',
-      'matched pair at a front entry',
+      'man cave or bourbon room centerpiece',
+      'matched pair flanking a front entry — looks like you spent real money',
       'fire pit side table',
-      'succulent garden',
-      'water feature or rain barrel',
-      'firewood storage',
-      'wedding or event decor',
-      'whiskey barrel bar cart'
+      'drill drainage holes and you have the best planter you have ever owned',
+      'outdoor bar cart base or whiskey tasting station',
+      'she-shed or workshop decor',
+      'wedding or event backdrop',
+      'rain barrel conversion with spigot',
+      'raised garden bed alternative',
+      'front porch statement piece'
     ],
     payment:'Venmo, Cash App, Zelle, PayPal. Non-refundable deposit holds your order.',
-    notes:'The wood naturally silvers over time or seal it to keep the barrel color. Delivery available on larger orders.'
+    delivery:'Delivery available on larger orders.',
+    notes:'Bring a friend — 100 lbs. Two people strongly recommended for transport.',
+    category:'Home Decor / Garden'
   },
   {
-    id:'pl',
-    name:'Half Barrel Planters (Prepped)',
-    codeBase:'PL',
-    price:'$65',
+    id:'ob1', name:"Maker's Mark White Oak Barrels", code:'OB1', price:'$100',
+    condition:'Used - Good', material:'White Oak Wood', color:'Brown / Natural Oak',
+    brand:"Maker's Mark (original distillery markings intact — not stickers or stencils)",
     dims:[
-      '26 inches across, 17-18 inches tall, pre-drilled for drainage',
-      'roughly 26" wide, 18" deep, drainage holes already drilled',
-      'half barrel planter — 26 inch diameter, ready to plant',
-      'about two feet across, 18 inches deep, drain holes included',
-      'measures 26" diameter, 17" tall, fully prepped with drainage',
-      '26-inch half barrel, 17 inches tall, drain-ready',
-      'two feet wide, 18 inches deep — drainage done, just plant',
-      '26" across, 17" tall, bottom drilled and ready to go'
+      "26 inches across, 36 inches tall, 100 lbs — Maker's Mark branded",
+      "roughly 26\" wide, 36\" tall, around 100 lbs with original Maker's Mark markings",
+      "full barrel: 26-inch diameter, 36 inches tall — branded with Maker's Mark distillery marks",
+      "about two feet across and three feet tall, 100 lbs, original branding intact",
+      "26\" diameter, 36\" tall, 100 lbs — authentic Maker's Mark stamp on every barrel",
+      "measures 26\" across, stands 36\" tall at 100 lbs — Maker's Mark markings are original",
+      "two feet wide, three feet tall, 100 lbs — not a replica, these came out of the distillery",
+      "26\" diameter, 36\" height, approximately 100 lbs, Maker's Mark branding throughout"
     ],
-    material:'White oak half barrels with pre-drilled drainage. Steel hoops, solid stave construction.',
+    sourcing:"Authentic Maker's Mark distillery barrels — original branded markings from the cooperage, not stickers or stencils.",
     useCases:[
-      'herb garden on a patio or deck',
+      "home bar or bourbon room statement piece",
+      "Maker's Mark collector display",
+      "upscale patio or outdoor entertaining setup",
+      "man cave centerpiece with real distillery provenance",
+      "restaurant or bar decor",
+      "wedding ceremony backdrop or photo prop",
+      "gift for a serious bourbon person",
+      "matched pair at a front entry",
+      "fire pit surround or side table",
+      "she-shed or reading nook feature"
+    ],
+    payment:'Venmo, Cash App, Zelle, PayPal. Non-refundable deposit holds your order.',
+    delivery:'Delivery available on larger orders.',
+    notes:"Original Maker's Mark branding. Bring a friend — 100 lbs. These move fast.",
+    category:'Home Decor / Collectibles'
+  },
+  {
+    id:'op', name:'Whiskey Barrel Planters (Prepped)', code:'OP', price:'',
+    condition:'Used - Good', material:'White Oak Wood', color:'Brown / Natural Oak',
+    brand:'',
+    dims:[
+      '26 inches across, 18 inches deep, drainage holes pre-drilled',
+      'roughly 26" wide, 18" deep — drain holes already done, just add soil',
+      'half barrel planter: 26-inch diameter, 18 inches tall, drain-ready',
+      'about two feet across and 18 inches deep with drainage pre-drilled',
+      'measures 26" in diameter, 18" tall — drainage holes already cut',
+      '26" diameter, 18" height, fully prepped for planting',
+      'two feet wide, 18 inches deep — drainage done, plant it today',
+      '26" across, 18" tall, bottom drilled and ready to go'
+    ],
+    sourcing:'White oak half barrels from licensed distilleries, prepped with drainage for immediate planting.',
+    useCases:[
+      'herb garden on a patio or deck — plant it the day you pick it up',
       'matched pair flanking a front door',
-      'vegetable garden with good drainage',
-      'perennial flower display',
-      'succulent and cactus planter',
+      'vegetable garden with natural drainage',
+      'perennial flower display that lasts for years',
+      'succulents and drought-tolerant plants',
       'privacy screen with tall ornamental grasses',
       'raised bed alternative for small yards',
       'seasonal color rotation'
     ],
     payment:'Venmo, Cash App, Zelle, PayPal. Deposit holds your order.',
-    notes:'Drainage holes already drilled — just add soil and plant. Can deliver on larger orders.'
+    delivery:'Delivery available on orders.',
+    notes:'Drainage holes already drilled — just add soil and plant.',
+    category:'Garden / Outdoor'
+  },
+  {
+    id:'rb', name:'Rain Barrels', code:'RB', price:'',
+    condition:'Used - Good', material:'Plastic / Food Grade', color:'Various',
+    brand:'',
+    dims:[
+      '55 gallon capacity, standard drum size',
+      'holds 55 gallons — standard barrel dimensions',
+      '55-gallon drum, food grade',
+      'full 55-gallon capacity, standard pickup/truck-friendly size',
+      'approximately 35 inches tall, 23 inches wide, 55 gallon capacity',
+      '55 gallons, fits in a standard pickup bed',
+      'standard 55-gallon drum dimensions',
+      '23" diameter, 35" tall — 55 gallon capacity'
+    ],
+    sourcing:'Food grade certified barrels suited for rainwater collection and water storage.',
+    useCases:[
+      'rainwater collection from downspouts',
+      'garden irrigation water storage',
+      'livestock water supply',
+      'homestead or farm water storage',
+      'emergency water preparedness',
+      'compost tea brewing',
+      'off-grid water system component',
+      'drought-season garden watering'
+    ],
+    payment:'Venmo, Cash App, Zelle, PayPal.',
+    delivery:'Delivery available on larger orders.',
+    notes:'Add spigot for easy access. Food grade certified.',
+    category:'Farm / Garden'
+  },
+  {
+    id:'fsb1', name:'Food Grade Steel Barrels', code:'FSB1', price:'',
+    condition:'Used - Good', material:'Steel', color:'Silver/Grey',
+    brand:'',
+    dims:[
+      '55 gallon steel drum, food grade certified',
+      'standard 55-gallon steel drum — food grade',
+      '55 gallons, heavy gauge steel, food grade certified',
+      'full 55-gallon capacity steel drum — food grade rated',
+      'approximately 35 inches tall, 23 inches wide, 55 gallon steel',
+      '55-gallon heavy steel drum, food grade certification',
+      'standard drum: 23" wide, 35" tall, 55-gallon capacity',
+      '55 gallons of heavy gauge steel — food grade rated throughout'
+    ],
+    sourcing:'Food grade certified steel drums from industrial sources.',
+    useCases:[
+      'water storage for farm or homestead',
+      'fuel or fluid storage',
+      'livestock water supply',
+      'emergency preparedness storage',
+      'industrial or shop storage',
+      'compost bin conversion',
+      'rainwater collection',
+      'bulk dry goods storage'
+    ],
+    payment:'Venmo, Cash App, Zelle, PayPal.',
+    delivery:'Delivery available on larger orders.',
+    notes:'Food grade certified. Great for farm, homestead, or emergency prep.',
+    category:'Farm / Industrial'
+  },
+  {
+    id:'fsbb', name:'Burn Barrels', code:'FSBB', price:'',
+    condition:'Used - Good', material:'Steel', color:'Black/Grey',
+    brand:'',
+    dims:[
+      '55 gallon steel drum, ready to use as burn barrel',
+      'standard 55-gallon steel drum — burn barrel ready',
+      '55-gallon heavy steel drum prepped for burning',
+      'full 55-gallon capacity, heavy steel, burn barrel ready',
+      'approximately 35 inches tall, 23 inches wide, steel burn barrel',
+      '55-gallon steel drum — use it as-is for yard waste burning',
+      'standard drum dimensions: 23" wide, 35" tall — ready to burn',
+      '55 gallons, heavy steel — burn barrel right out of your truck'
+    ],
+    sourcing:'Heavy steel drums suited for yard waste and burn barrel use.',
+    useCases:[
+      'yard waste and leaf burning',
+      'paper and cardboard disposal',
+      'farm debris burning',
+      'fire pit alternative',
+      'brush pile disposal',
+      'rural property waste management'
+    ],
+    payment:'Venmo, Cash App, Zelle, PayPal.',
+    delivery:'Delivery available on larger orders.',
+    notes:'Check local regulations on open burning. Ready to use as-is.',
+    category:'Farm / Outdoor'
+  },
+  {
+    id:'pp1', name:'HD Plastic Planters', code:'PP1', price:'',
+    condition:'Used - Good', material:'Heavy Duty Plastic', color:'Various',
+    brand:'',
+    dims:[
+      'heavy duty commercial plastic, various sizes available',
+      'commercial grade plastic planters, multiple sizes in stock',
+      'HD plastic, built for commercial nursery use — sizes vary',
+      'heavy gauge commercial plastic, various dimensions available',
+      'built heavier than anything at a big box store — sizes available',
+      'commercial nursery-grade plastic, several sizes in stock',
+      'heavy duty plastic construction, ask about sizes available',
+      'multiple sizes available — all commercial nursery grade plastic'
+    ],
+    sourcing:'Heavy duty commercial and industrial plastic planters from nursery and landscaping sources.',
+    useCases:[
+      'patio or deck container gardening',
+      'flower and annual displays',
+      'vegetable growing',
+      'herb garden containers',
+      'shrub planting',
+      'indoor plant staging',
+      'nursery and greenhouse use',
+      'seasonal color rotation'
+    ],
+    payment:'Venmo, Cash App, Zelle, PayPal. Bulk pricing available.',
+    delivery:'Delivery available on larger orders.',
+    notes:'Heavy duty commercial grade — built tougher than retail store planters. Bulk pricing available.',
+    category:'Garden / Outdoor'
+  },
+  {
+    id:'pp2', name:'HD Plastic Planters Large', code:'PP2', price:'',
+    condition:'Used - Good', material:'Heavy Duty Plastic', color:'Various',
+    brand:'',
+    dims:[
+      'large commercial plastic planters, heavy duty construction',
+      'oversized commercial grade plastic — built for large plants and trees',
+      'large format HD plastic, commercial nursery grade',
+      'big planters: commercial grade, heavy duty, various large sizes',
+      'large commercial plastic planters, ask about specific dimensions',
+      'oversized nursery-grade plastic, several large sizes available',
+      'heavy duty large plastic — commercial spec, various sizes in stock',
+      'large format, heavy gauge commercial plastic — multiple sizes available'
+    ],
+    sourcing:'Large commercial and industrial plastic planters from nursery and landscaping sources.',
+    useCases:[
+      'large tree planting and container growing',
+      'shrub and ornamental grass containers',
+      'commercial landscaping and property staging',
+      'nursery and greenhouse production',
+      'large estate or property plantings',
+      'bulk container gardening installations',
+      'privacy screen plantings',
+      'commercial patio and entrance plantings'
+    ],
+    payment:'Venmo, Cash App, Zelle, PayPal. Bulk pricing available.',
+    delivery:'Delivery available on larger orders.',
+    notes:'Large size — great for trees, shrubs, commercial use. Bulk pricing available.',
+    category:'Garden / Commercial'
   }
 ];
 
-// ── LOCATIONS ──────────────────────────────────────────────────────────────
+// ── LOCATIONS ───────────────────────────────────────────────────────────────
 var LOCATIONS = [
-  {id:'bal_n', name:'Baltimore — North',     city:'Baltimore',    quad:'North',     cityCode:'BAL', area:'north Baltimore, Towson, Timonium area'},
-  {id:'bal_s', name:'Baltimore — South',     city:'Baltimore',    quad:'South',     cityCode:'BAL', area:'south Baltimore, Brooklyn, Dundalk area'},
-  {id:'bal_e', name:'Baltimore — East',      city:'Baltimore',    quad:'East',      cityCode:'BAL', area:'east Baltimore, Essex, Middle River area'},
-  {id:'bal_w', name:'Baltimore — West',      city:'Baltimore',    quad:'West',      cityCode:'BAL', area:'west Baltimore, Catonsville, Ellicott City area'},
-  {id:'bal_l', name:'Baltimore — Laurel',    city:'Baltimore',    quad:'Laurel',    cityCode:'BAL', area:'Laurel, Columbia, Jessup area'},
-  {id:'win',   name:'Winchester, VA',        city:'Winchester',   quad:'',          cityCode:'WIN', area:'Winchester VA, Front Royal, Stephens City area'},
-  {id:'way',   name:'Waynesboro, VA',        city:'Waynesboro',   quad:'',          cityCode:'WAY', area:'Waynesboro VA, Staunton, Fishersville, buyers between Waynesboro and Charlottesville'},
-  {id:'rur',   name:'Rural / Frederick MD',  city:'Frederick',    quad:'Rural',     cityCode:'RUR', area:'Frederick MD, rural western Maryland'}
+  {id:'bal_n',  name:'Baltimore — North',    cityCode:'BAL', sub:'NL1', area:'north Baltimore, Towson, Timonium, Lutherville area'},
+  {id:'bal_s',  name:'Baltimore — South',    cityCode:'BAL', sub:'NL2', area:'south Baltimore, Brooklyn, Dundalk, Glen Burnie area'},
+  {id:'bal_e',  name:'Baltimore — East',     cityCode:'BAL', sub:'NL3', area:'east Baltimore, Essex, Middle River, Rosedale area'},
+  {id:'bal_w',  name:'Baltimore — West',     cityCode:'BAL', sub:'NL4', area:'west Baltimore, Catonsville, Ellicott City, Woodlawn area'},
+  {id:'bal_l',  name:'Baltimore — Laurel',   cityCode:'BAL', sub:'NL5', area:'Laurel, Columbia, Jessup, Savage area'},
+  {id:'win',    name:'Winchester, VA',       cityCode:'WIN', sub:'NL1', area:'Winchester VA, Front Royal, Stephens City, Berryville area'},
+  {id:'way',    name:'Waynesboro, VA',       cityCode:'WAY', sub:'NL1', area:'Waynesboro VA, Staunton, Fishersville — buyers between Waynesboro and Charlottesville'},
+  {id:'rur',    name:'Rural / Frederick MD', cityCode:'RUR', sub:'NL1', area:'Frederick MD, Hagerstown, rural western Maryland'}
 ];
 
-// ── DIMENSION VARIANT TRACKING — ensures no two listings share the same dim string ──
-var usedDimIndexes = {};
-
-function getUniqueDim(product, listingIndex) {
-  var key = product.id;
-  if (!usedDimIndexes[key]) usedDimIndexes[key] = [];
-  var available = product.dims.map(function(_,i){return i;}).filter(function(i){return usedDimIndexes[key].indexOf(i)===-1;});
-  if (available.length === 0) { usedDimIndexes[key] = []; available = product.dims.map(function(_,i){return i;}); }
-  var pick = available[listingIndex % available.length];
-  usedDimIndexes[key].push(pick);
-  return product.dims[pick];
+// ── DIMENSION TRACKING — no two listings share the same phrasing ─────────────
+var usedDimIdx = {};
+function getUniqueDim(prod, idx) {
+  if (!usedDimIdx[prod.id]) usedDimIdx[prod.id] = [];
+  var used = usedDimIdx[prod.id];
+  var avail = prod.dims.map(function(_,i){return i;}).filter(function(i){return used.indexOf(i)===-1;});
+  if (!avail.length) { usedDimIdx[prod.id]=[]; avail=prod.dims.map(function(_,i){return i;}); }
+  var pick = avail[idx % avail.length];
+  used.push(pick);
+  return prod.dims[pick];
 }
 
-function shuffleUseCases(arr, seed) {
-  var a = arr.slice();
-  for (var i=a.length-1;i>0;i--){var j=Math.floor((seed*9301+49297)%233280/233280*(i+1));seed=seed*9301+49297;var t=a[i];a[i]=a[j];a[j]=t;}
+function shuffleArr(arr, seed) {
+  var a=arr.slice();
+  for(var i=a.length-1;i>0;i--){var j=Math.floor((seed*9301+49297)%233280/233280*(i+1));seed=seed*9301+49297;var t=a[i];a[i]=a[j];a[j]=t;}
   return a;
 }
 
-// ── SKU BUILDER ────────────────────────────────────────────────────────────
-function buildSKU(product, loc) {
-  var quad = loc.quad ? '-'+loc.quad.substring(0,2).toUpperCase() : '';
-  return loc.cityCode+'-'+product.codeBase+quad;
+function buildSKU(prod, loc) {
+  return loc.cityCode+'-'+prod.code+'-'+loc.sub;
 }
 
-// ── RENDER SIDEBAR ─────────────────────────────────────────────────────────
+// ── RENDER SIDEBAR ──────────────────────────────────────────────────────────
 (function(){
-  var pl = document.getElementById('prodList');
+  var pl=document.getElementById('prodList');
   PRODUCTS.forEach(function(p,i){
     var d=document.createElement('div');
     d.className='prod-card'+(i===0?' active':'');
     d.dataset.id=p.id;
-    d.innerHTML='<div class="prod-name">'+p.name+'</div><div class="prod-code">'+p.codeBase+'</div><div class="prod-meta">'+p.price+' · saved profile</div>';
+    d.innerHTML='<div class="prod-name">'+p.name+'</div><div style="display:flex;gap:8px;margin-top:3px;"><span class="prod-code">'+p.code+'</span><span class="prod-price">'+(p.price||'price TBD')+'</span></div>';
     d.addEventListener('click',function(){
       document.querySelectorAll('.prod-card').forEach(function(x){x.classList.remove('active');});
       d.classList.add('active');
+      updateLocCodes();
       updBtn();
     });
     pl.appendChild(d);
   });
 
-  var ll = document.getElementById('locList');
+  var ll=document.getElementById('locList');
   LOCATIONS.forEach(function(loc){
     var d=document.createElement('div');
     d.className='loc-item';
     d.dataset.id=loc.id;
-    d.innerHTML='<div class="loc-chk"></div><span>'+loc.name+'</span><span class="loc-code">'+buildSKU({codeBase:'??'},loc)+'</span>';
+    d.innerHTML='<div class="lck"></div><span>'+loc.name+'</span><span class="loc-code" id="lcode-'+loc.id+'">--</span>';
     d.addEventListener('click',function(){
       d.classList.toggle('chk');
-      d.querySelector('.loc-chk').textContent=d.classList.contains('chk')?'✓':'';
+      d.querySelector('.lck').textContent=d.classList.contains('chk')?'✓':'';
       updBtn();
     });
     ll.appendChild(d);
   });
+
+  updateLocCodes();
 })();
+
+function updateLocCodes() {
+  var prod = getActiveProd();
+  LOCATIONS.forEach(function(loc){
+    var el = document.getElementById('lcode-'+loc.id);
+    if (el) el.textContent = prod ? buildSKU(prod, loc) : '--';
+  });
+}
 
 function getActiveProd(){
   var el=document.querySelector('.prod-card.active');
@@ -276,208 +440,147 @@ function updBtn(){
   document.getElementById('genBtn').disabled=!(getActiveProd()&&getChkLocs().length>0);
 }
 
-// ── GENERATE ───────────────────────────────────────────────────────────────
+// ── GENERATE ────────────────────────────────────────────────────────────────
 async function generate() {
-  var prod = getActiveProd();
-  var locs = getChkLocs();
-  var oPrice = document.getElementById('oPrice').value.trim();
-  var oNote  = document.getElementById('oNote').value.trim();
-  var price  = oPrice || prod.price;
+  var prod=getActiveProd(), locs=getChkLocs();
+  var oPrice=document.getElementById('oPrice').value.trim();
+  var oNote=document.getElementById('oNote').value.trim();
+  var price=oPrice||prod.price||'call for pricing';
 
-  var panel = document.getElementById('panel');
+  var panel=document.getElementById('panel');
   document.getElementById('emptyState').style.display='none';
   panel.innerHTML='';
+  usedDimIdx={};
 
-  // Timing warning if 4+ listings same day
-  if (locs.length >= 4) {
-    var warn = document.createElement('div');
-    warn.className='timing-note';
-    warn.innerHTML='<strong>⚠ Posting Strategy Reminder</strong>FB flags multiple listings posted same day same seller. Post Baltimore quadrants Wednesday, Winchester/Waynesboro Thursday. Never post all 8 on the same day — stagger across 2 days minimum.';
-    panel.appendChild(warn);
+  if(locs.length>=4){
+    var w=document.createElement('div');
+    w.className='timing-note';
+    w.innerHTML='<strong>⚠ Posting Reminder</strong>Never post all locations same day — FB flags it. Baltimore quadrants Wednesday, Winchester/Waynesboro Thursday. Stagger across 2 days minimum.';
+    panel.appendChild(w);
   }
 
-  // Reset dim tracking for this generation session
-  usedDimIndexes = {};
+  var allLocNames=locs.map(function(l){return l.name;}).join(', ');
+  var placeholders=[];
 
-  // Generate each location in parallel
-  var promises = locs.map(function(loc, idx) {
-    return generateOne(prod, loc, price, oNote, idx);
-  });
-
-  // Show loading placeholders while running
-  var placeholders = locs.map(function(loc){
-    var card = document.createElement('div');
+  locs.forEach(function(loc,idx){
+    var card=document.createElement('div');
     card.className='loading-card';
-    card.id='loading-'+loc.id;
+    card.id='lc-'+loc.id;
     card.innerHTML='<div class="spinner"></div><div class="loading-txt">Generating '+loc.name+'…</div>';
     panel.appendChild(card);
-    return card;
-  });
+    placeholders.push(card);
 
-  // Replace each placeholder as results come in
-  promises.forEach(function(p, idx){
-    p.then(function(result){
-      var placeholder = placeholders[idx];
-      var card = buildListingCard(result);
-      panel.replaceChild(card, placeholder);
+    generateOne(prod,loc,price,oNote,idx,allLocNames,locs).then(function(result){
+      var newCard=buildCard(result);
+      panel.replaceChild(newCard,card);
     }).catch(function(err){
-      var placeholder = placeholders[idx];
-      placeholder.innerHTML='<div style="color:var(--red);font-size:.75rem;">Failed: '+err.message+'</div>';
+      card.innerHTML='<div style="color:var(--red);font-size:.73rem;">Failed for '+loc.name+': '+err.message+'</div>';
     });
   });
 }
 
-async function generateOne(prod, loc, price, oNote, idx) {
-  var dimString = getUniqueDim(prod, idx);
-  var seed = Date.now() + idx * 9999;
-  var shuffledUses = shuffleUseCases(prod.useCases, seed);
-  var uses3 = shuffledUses.slice(0,3).join(', ');
-  var uses4 = shuffledUses.slice(0,4);
-  var sku = buildSKU(prod, loc);
+async function generateOne(prod,loc,price,oNote,idx,allLocNames,allLocs) {
+  var dimString=getUniqueDim(prod,idx);
+  var seed=Date.now()+idx*7919;
+  var shuffledUses=shuffleArr(prod.useCases,seed);
+  var uses=shuffledUses.slice(0,4);
+  var sku=buildSKU(prod,loc);
+  var locsBeforeThis=allLocs.slice(0,idx).map(function(l){return l.name;}).join(', ')||'none yet';
 
-  // Build list of ALL locations being generated this session so AI avoids repeating angles
-  var allLocsThisSession = getChkLocs().map(function(l){ return l.name; }).join(', ');
-  var locsBefore = getChkLocs().slice(0, idx).map(function(l){ return l.name; }).join(', ') || 'none yet';
+  var titleInstruction='Choose a title angle that is COMPLETELY UNIQUE for this listing ('+loc.name+'). '
+    +'This session covers: '+allLocNames+'. Already generated for: '+locsBeforeThis+'. '
+    +'Draw from these angles OR invent your own — the key is no two titles in this session should lead with the same approach: '
+    +'scarcity lead, material/quality lead, use-case lead, origin/provenance lead, price/value lead, size/spec lead, action verb lead, season lead, buyer-profile lead, curiosity lead. '
+    +'Under 70 characters. No city name. No ALL CAPS. No clichés.';
 
-  var titleAngle = `Choose a title angle that is UNIQUE to this specific listing for ${loc.name}. 
-This session is generating listings for: ${allLocsThisSession}.
-Listings already generated before this one: ${locsBefore}.
+  var prompt='You are writing a Facebook Marketplace listing.\n\n'
+    +'PRODUCT: '+prod.name+'\n'
+    +'SKU: '+sku+'\n'
+    +'PRICE: '+price+'\n'
+    +'CONDITION: '+prod.condition+'\n'
+    +'MATERIAL: '+prod.material+'\n'
+    +(prod.brand?'BRAND: '+prod.brand+'\n':'')
+    +'DIMENSIONS — use EXACTLY this wording verbatim: "'+dimString+'"\n'
+    +'SOURCING: '+prod.sourcing+'\n'
+    +'USE CASES in this exact order: '+uses.map(function(u,i){return (i+1)+'. '+u;}).join(' | ')+'\n'
+    +'PAYMENT: '+prod.payment+'\n'
+    +'DELIVERY: '+prod.delivery+'\n'
+    +'NOTES: '+prod.notes+'\n'
+    +(oNote?'SELLER NOTE: '+oNote+'\n':'')
+    +'\nTITLE INSTRUCTION: '+titleInstruction+'\n'
+    +'\nDESCRIPTION RULES:\n'
+    +'- Professional, confident tone. Not casual or chatty. Writes like someone who knows their product.\n'
+    +'- Open with ONE strong hook sentence — not a greeting, not "Looking for X", not "Great deal". Something specific and compelling.\n'
+    +'- Short product paragraph: use the EXACT dimension string given above verbatim, mention material and sourcing naturally.\n'
+    +'- Use cases: mention them in the order given. 1-2 lines, specific not generic.\n'
+    +'- Pickup, delivery, and payment info woven in naturally.\n'
+    +'- End with SKU on its own line: '+sku+'\n'
+    +'- Total: 120-180 words. Tight. No filler.\n'
+    +'- NEVER use: "Look no further", "Perfect for any", "Don\'t miss out", "Great deal", "You won\'t be disappointed", "Amazing", "Gorgeous"\n'
+    +'- The EXACT dimension string must appear verbatim — do not rephrase it.\n'
+    +'\nGROUP POST (separate, for Facebook buy/sell groups in '+loc.area+'):\n'
+    +'Write 2-3 sentences. Casual but not desperate. Lead with what it is and the price. Include general pickup area naturally. End with soft CTA. Under 60 words.\n'
+    +'\nFormat your response EXACTLY as:\n'
+    +'TITLE: [title here]\n\n'
+    +'[description here]\n\n'
+    +'===GROUP===\n'
+    +'[group post here]';
 
-Possible angles to draw from (pick ONE that has not been used yet this session, or invent a completely different one):
-- Scarcity lead: "Only X left…" or quantity signal first
-- Material/quality lead: "Real", "Solid", "Genuine", "Authentic" as opener
-- Use-case lead: start with the application ("Planter Ready —", "Firewood Station —")
-- Origin lead: reference distillery, cooperage, authentic sourcing
-- Value/price lead: price-forward or comparison to retail
-- Size/spec lead: lead with the measurement or weight
-- Action verb lead: start with a verb (Pick Up, Grab, Get, Score)
-- Season/timing lead: tie to current season or immediate need
-- Buyer-profile lead: speak directly to a specific buyer type (gardeners, homeowners, patio people)
-- Curiosity lead: an unexpected angle that makes someone stop scrolling
-
-The title for ${loc.name} must feel completely different from every other listing in this session. Under 70 chars. No city name. No ALL CAPS. No cheesy phrases.`;
-
-  // Description must express dims in assigned unique way, use cases in shuffled order
-  var prompt = `You are writing a Facebook Marketplace listing for a seller in ${loc.area}.
-
-PRODUCT: ${prod.name}
-SKU: ${sku}
-PRICE: ${price}
-DIMENSIONS (use EXACTLY this phrasing — do not change the wording): "${dimString}"
-MATERIAL: ${prod.material}
-USE CASES to mention (in THIS order): ${uses4.map(function(u,i){return (i+1)+'. '+u;}).join(', ')}
-PAYMENT: ${prod.payment}
-NOTES: ${prod.notes}
-${oNote ? 'SELLER NOTE: '+oNote : ''}
-
-TITLE INSTRUCTION: ${titleAngle} Do NOT mention the city name in the title. Make it feel natural and buyer-focused, not like a template. No ALL CAPS. No "—" unless used intentionally.
-
-DESCRIPTION REQUIREMENTS:
-- Professional, confident tone. NOT casual or chatty. Write like someone who knows their product and their buyer.
-- Open with a single strong hook sentence (1 line max). Not a greeting, not "Looking for…"
-- Then a short product paragraph: dimensions (use the exact string given), material, construction quality.
-- Then a use case section — short lines or brief list, in the order given above.
-- Then pickup/delivery and payment info.
-- End with the SKU code: ${sku}
-- Total length: 120-180 words. Tight. No fluff.
-- NO phrases like "Look no further", "Perfect for any", "Don't miss out", "Great deal", "You won't be disappointed"
-- The dimension string must appear verbatim — do not paraphrase it
-
-SEPARATE GROUP POST (after the listing, separated by ===GROUP===):
-Write a 2-3 sentence buy/sell group post for the ${loc.area}. 
-- Casual but not desperate. Lead with what it is and price. 
-- Include pickup location area naturally. 
-- End with a soft CTA. Under 60 words.
-
-Respond with TITLE on first line, then blank line, then DESCRIPTION, then ===GROUP===, then GROUP POST. Nothing else.`;
-
-  var response = await fetch(WORKER, {
+  var res=await fetch(WORKER,{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:600,
-      messages:[{role:'user',content:prompt}]
-    })
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:650,messages:[{role:'user',content:prompt}]})
   });
+  if(!res.ok) throw new Error('API '+res.status);
+  var data=await res.json();
+  var raw=data.content.map(function(b){return b.text||'';}).join('');
 
-  if (!response.ok) throw new Error('API error '+response.status);
-  var data = await response.json();
-  var raw = data.content.map(function(b){return b.text||'';}).join('');
+  var parts=raw.split('===GROUP===');
+  var main=parts[0].trim();
+  var group=(parts[1]||'').trim();
+  var lines=main.split('\n');
+  var title=lines[0].replace(/^TITLE:\s*/i,'').trim();
+  var desc=lines.slice(1).join('\n').trim();
+  if(desc.indexOf(sku)===-1) desc+='\n\n'+sku;
 
-  // Parse output
-  var parts = raw.split('===GROUP===');
-  var mainPart = parts[0].trim();
-  var groupPart = (parts[1]||'').trim();
-  var lines = mainPart.split('\n');
-  var title = lines[0].replace(/^TITLE:?\s*/i,'').trim();
-  var description = lines.slice(1).join('\n').trim();
-
-  // Ensure SKU is in description
-  if (description.indexOf(sku) === -1) description += '\n\n'+sku;
-
-  return {prod:prod, loc:loc, sku:sku, price:price, title:title, description:description, groupPost:groupPart, dimString:dimString};
+  return {prod:prod,loc:loc,sku:sku,price:price,title:title,desc:desc,group:group};
 }
 
 // ── BUILD CARD ──────────────────────────────────────────────────────────────
-function buildListingCard(r) {
-  var card = document.createElement('div');
+function buildCard(r) {
+  var card=document.createElement('div');
   card.className='listing-card';
-
-  var titleLen = r.title.length;
-  var titleClass = titleLen <= 70 ? 'ok' : titleLen <= 80 ? 'warn' : 'over';
-
-  card.innerHTML = `
-    <div class="listing-hdr">
-      <span class="listing-loc">${r.loc.name}</span>
-      <span class="listing-sku">${r.sku}</span>
-      <div class="listing-hsp"></div>
-      <span style="font-size:.65rem;color:var(--muted);font-family:'IBM Plex Mono',monospace;">${r.price}</span>
-    </div>
-    <div class="listing-body">
-      <div class="listing-field">
-        <div class="lf-label">
-          Title
-          <span class="charcount ${titleClass}">${titleLen} chars</span>
-          <button class="copy-btn" onclick="copyText(this,'${escQ(r.title)}')">Copy</button>
-        </div>
-        <div class="lf-content title-box">${escH(r.title)}</div>
-      </div>
-      <div class="listing-field">
-        <div class="lf-label">
-          Description
-          <button class="copy-btn" onclick="copyField(this,'desc-${r.loc.id}')">Copy</button>
-        </div>
-        <div class="lf-content" id="desc-${r.loc.id}">${escH(r.description)}</div>
-      </div>
-      ${r.groupPost ? `
-      <div class="group-post-card">
-        <div class="gp-label">Group Post <button class="copy-btn" style="border-color:rgba(90,158,114,.3)" onclick="copyField(this,'gp-${r.loc.id}')">Copy</button></div>
-        <div class="gp-content" id="gp-${r.loc.id}">${escH(r.groupPost)}</div>
-      </div>` : ''}
-    </div>`;
+  var tl=r.title.length;
+  var tc=tl<=70?'ok':tl<=80?'warn':'over';
+  card.innerHTML='<div class="listing-hdr">'
+    +'<span class="listing-loc">'+r.loc.name+'</span>'
+    +'<span class="listing-sku">'+r.sku+'</span>'
+    +'<div class="listing-hsp"></div>'
+    +'<span class="listing-price">'+r.price+'</span>'
+    +'</div>'
+    +'<div class="listing-body">'
+    +'<div class="lf"><div class="lf-lbl">Title <span class="cc '+tc+'">'+tl+' chars</span><button class="copy-btn" data-copy="title-'+r.loc.id+'">Copy</button></div>'
+    +'<div class="lf-content title-box" id="title-'+r.loc.id+'">'+escH(r.title)+'</div></div>'
+    +'<div class="lf"><div class="lf-lbl">Description <button class="copy-btn" data-copy="desc-'+r.loc.id+'">Copy</button></div>'
+    +'<div class="lf-content" id="desc-'+r.loc.id+'">'+escH(r.desc)+'</div></div>'
+    +(r.group?'<div class="gpc"><div class="gpl">Group Post <button class="copy-btn" data-copy="gp-'+r.loc.id+'">Copy</button></div>'
+    +'<div class="gp-content" id="gp-'+r.loc.id+'">'+escH(r.group)+'</div></div>':'')
+    +'</div>';
+  card.addEventListener('click',function(e){
+    var btn=e.target.closest('.copy-btn');
+    if(!btn)return;
+    var id=btn.dataset.copy;
+    var el=document.getElementById(id);
+    if(!el)return;
+    navigator.clipboard.writeText(el.innerText).then(function(){
+      btn.textContent='Copied ✓';btn.classList.add('copied');
+      setTimeout(function(){btn.textContent='Copy';btn.classList.remove('copied');},2000);
+    });
+  });
   return card;
 }
 
-// ── UTILS ───────────────────────────────────────────────────────────────────
-function escH(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function escQ(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
-
-function copyText(btn, text) {
-  text = text.replace(/\\'/g,"'").replace(/&quot;/g,'"');
-  navigator.clipboard.writeText(text).then(function(){
-    btn.textContent='Copied ✓'; btn.classList.add('copied');
-    setTimeout(function(){btn.textContent='Copy';btn.classList.remove('copied');},2000);
-  });
-}
-function copyField(btn, id) {
-  var el = document.getElementById(id);
-  if(!el)return;
-  navigator.clipboard.writeText(el.innerText).then(function(){
-    btn.textContent='Copied ✓'; btn.classList.add('copied');
-    setTimeout(function(){btn.textContent='Copy';btn.classList.remove('copied');},2000);
-  });
-}
+function escH(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 </script>
 </body>
 </html>
