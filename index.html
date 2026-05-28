@@ -445,39 +445,63 @@ function updBtn(){
 // ── GENERATE ────────────────────────────────────────────────────────────────
 async function generate() {
   var prod=getActiveProd(), locs=getChkLocs();
+  if(!prod||!locs.length) return;
+
+  var btn=document.getElementById('genBtn');
+  btn.disabled=true;
+  btn.textContent='Generating…';
+
   var oPrice=document.getElementById('oPrice').value.trim();
   var oNote=document.getElementById('oNote').value.trim();
   var price=oPrice||(prod.price&&prod.price.length?prod.price:'');
 
   var panel=document.getElementById('panel');
-  document.getElementById('emptyState').style.display='none';
-  panel.innerHTML='';
+  // Clear results area but keep emptyState in DOM
+  var ra=document.getElementById('ra');
+  if(ra) ra.innerHTML='';
+  else {
+    // First run — emptyState still exists, hide it and create ra
+    var es=document.getElementById('emptyState');
+    if(es) es.style.display='none';
+    ra=document.createElement('div');
+    ra.id='ra';
+    panel.appendChild(ra);
+  }
   usedDimIdx={};
 
   if(locs.length>=4){
     var w=document.createElement('div');
     w.className='timing-note';
     w.innerHTML='<strong>⚠ Posting Reminder</strong>Never post all locations same day — FB flags it. Baltimore quadrants Wednesday, Winchester/Waynesboro Thursday. Stagger across 2 days minimum.';
-    panel.appendChild(w);
+    ra.appendChild(w);
   }
 
   var allLocNames=locs.map(function(l){return l.name;}).join(', ');
-  var placeholders=[];
 
-  locs.forEach(function(loc,idx){
+  // Create placeholders
+  var cards=locs.map(function(loc){
     var card=document.createElement('div');
     card.className='loading-card';
     card.id='lc-'+loc.id;
     card.innerHTML='<div class="spinner"></div><div class="loading-txt">Generating '+loc.name+'…</div>';
-    panel.appendChild(card);
-    placeholders.push(card);
+    ra.appendChild(card);
+    return card;
+  });
 
-    generateOne(prod,loc,price,oNote,idx,allLocNames,locs).then(function(result){
+  // Generate all, replace placeholders as each completes
+  var promises=locs.map(function(loc,idx){
+    return generateOne(prod,loc,price,oNote,idx,allLocNames,locs).then(function(result){
       var newCard=buildCard(result);
-      panel.replaceChild(newCard,card);
+      ra.replaceChild(newCard,cards[idx]);
     }).catch(function(err){
-      card.innerHTML='<div style="color:var(--red);font-size:.73rem;">Failed for '+loc.name+': '+err.message+'</div>';
+      cards[idx].innerHTML='<div style="color:var(--red);font-size:.73rem;">Failed for '+loc.name+': '+err.message+'</div>';
     });
+  });
+
+  // Re-enable button when all done
+  Promise.all(promises).then(function(){
+    btn.disabled=false;
+    btn.textContent='Generate Listings →';
   });
 }
 
