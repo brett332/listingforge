@@ -134,7 +134,7 @@ var PRODUCTS = [
       'front porch statement piece'
     ],
     payment:'Venmo, Cash App, Zelle, PayPal. Non-refundable deposit holds your order.',
-    delivery:'Delivery available on larger orders.',
+    delivery:'Pickup is in west Baltimore, easy off I-695 and Security Blvd — about 15 minutes from most of the metro. Delivery available on orders of 3 or more.',
     notes:'Bring a friend — 100 lbs. Two people strongly recommended for transport.',
     category:'Home Decor / Garden'
   },
@@ -166,7 +166,7 @@ var PRODUCTS = [
       "she-shed or reading nook feature"
     ],
     payment:'Venmo, Cash App, Zelle, PayPal. Non-refundable deposit holds your order.',
-    delivery:'Delivery available on larger orders.',
+    delivery:'Pickup is in west Baltimore, easy off I-695 and Security Blvd — about 15 minutes from most of the metro. Delivery available on orders of 3 or more.',
     notes:"Original Maker's Mark branding. Bring a friend — 100 lbs. These move fast.",
     category:'Home Decor / Collectibles'
   },
@@ -196,7 +196,7 @@ var PRODUCTS = [
       'seasonal color rotation'
     ],
     payment:'Venmo, Cash App, Zelle, PayPal. Deposit holds your order.',
-    delivery:'Delivery available on orders.',
+    delivery:'Pickup is in west Baltimore, easy off I-695 and Security Blvd — about 15 minutes from most of the metro. Delivery available on orders of 3 or more.',
     notes:'Drainage holes already drilled — just add soil and plant.',
     category:'Garden / Outdoor'
   },
@@ -226,7 +226,7 @@ var PRODUCTS = [
       'drought-season garden watering'
     ],
     payment:'Venmo, Cash App, Zelle, PayPal.',
-    delivery:'Delivery available on larger orders.',
+    delivery:'Pickup is in west Baltimore, easy off I-695 and Security Blvd — about 15 minutes from most of the metro. Delivery available on orders of 3 or more.',
     notes:'Add spigot for easy access. Food grade certified.',
     category:'Farm / Garden'
   },
@@ -256,7 +256,7 @@ var PRODUCTS = [
       'bulk dry goods storage'
     ],
     payment:'Venmo, Cash App, Zelle, PayPal.',
-    delivery:'Delivery available on larger orders.',
+    delivery:'Pickup is in west Baltimore, easy off I-695 and Security Blvd — about 15 minutes from most of the metro. Delivery available on orders of 3 or more.',
     notes:'Food grade certified. Great for farm, homestead, or emergency prep.',
     category:'Farm / Industrial'
   },
@@ -284,7 +284,7 @@ var PRODUCTS = [
       'rural property waste management'
     ],
     payment:'Venmo, Cash App, Zelle, PayPal.',
-    delivery:'Delivery available on larger orders.',
+    delivery:'Pickup is in west Baltimore, easy off I-695 and Security Blvd — about 15 minutes from most of the metro. Delivery available on orders of 3 or more.',
     notes:'Check local regulations on open burning. Ready to use as-is.',
     category:'Farm / Outdoor'
   },
@@ -314,7 +314,7 @@ var PRODUCTS = [
       'seasonal color rotation'
     ],
     payment:'Venmo, Cash App, Zelle, PayPal. Bulk pricing available.',
-    delivery:'Delivery available on larger orders.',
+    delivery:'Pickup is in west Baltimore, easy off I-695 and Security Blvd — about 15 minutes from most of the metro. Delivery available on orders of 3 or more.',
     notes:'Heavy duty commercial grade — built tougher than retail store planters. Bulk pricing available.',
     category:'Garden / Outdoor'
   },
@@ -344,7 +344,7 @@ var PRODUCTS = [
       'commercial patio and entrance plantings'
     ],
     payment:'Venmo, Cash App, Zelle, PayPal. Bulk pricing available.',
-    delivery:'Delivery available on larger orders.',
+    delivery:'Pickup is in west Baltimore, easy off I-695 and Security Blvd — about 15 minutes from most of the metro. Delivery available on orders of 3 or more.',
     notes:'Large size — great for trees, shrubs, commercial use. Bulk pricing available.',
     category:'Garden / Commercial'
   }
@@ -357,19 +357,21 @@ var LOCATIONS = [
   {id:'bal_e',  name:'Baltimore — East',     cityCode:'BAL', sub:'NL3', area:'east Baltimore, Essex, Middle River, Rosedale area'},
   {id:'bal_w',  name:'Baltimore — West',     cityCode:'BAL', sub:'NL4', area:'west Baltimore, Catonsville, Ellicott City, Woodlawn area'},
   {id:'bal_l',  name:'Baltimore — Laurel',   cityCode:'BAL', sub:'NL5', area:'Laurel, Columbia, Jessup, Savage area'},
-  {id:'win',    name:'Winchester, VA',       cityCode:'WIN', sub:'NL1', area:'Winchester VA, Front Royal, Stephens City, Berryville area'},
-  {id:'way',    name:'Waynesboro, VA',       cityCode:'WAY', sub:'NL1', area:'Waynesboro VA, Staunton, Fishersville — buyers between Waynesboro and Charlottesville'},
+  {id:'win',    name:'Winchester, VA',       cityCode:'WIN', sub:'NL1', area:'Winchester VA, Front Royal, Stephens City, Berryville area', delivery:'Pickup location TBD for Winchester — message to arrange.'},
+  {id:'way',    name:'Waynesboro, VA',       cityCode:'WAY', sub:'NL1', area:'Waynesboro VA, Staunton, Fishersville — buyers between Waynesboro and Charlottesville', delivery:'Pickup location TBD for Waynesboro — message to arrange.'},
   {id:'rur',    name:'Rural / Frederick MD', cityCode:'RUR', sub:'NL1', area:'Frederick MD, Hagerstown, rural western Maryland'}
 ];
 
-// ── DIMENSION TRACKING — no two listings share the same phrasing ─────────────
+// ── DIMENSION TRACKING — fully dynamic, scales to any number of locations ────
+// Picks randomly from unused variants. When all are used, reshuffles randomly.
+// Never cycles predictably regardless of how many locations you add.
 var usedDimIdx = {};
-function getUniqueDim(prod, idx) {
+function getUniqueDim(prod) {
   if (!usedDimIdx[prod.id]) usedDimIdx[prod.id] = [];
   var used = usedDimIdx[prod.id];
   var avail = prod.dims.map(function(_,i){return i;}).filter(function(i){return used.indexOf(i)===-1;});
   if (!avail.length) { usedDimIdx[prod.id]=[]; avail=prod.dims.map(function(_,i){return i;}); }
-  var pick = avail[idx % avail.length];
+  var pick = avail[Math.floor(Math.random()*avail.length)];
   used.push(pick);
   return prod.dims[pick];
 }
@@ -445,7 +447,7 @@ async function generate() {
   var prod=getActiveProd(), locs=getChkLocs();
   var oPrice=document.getElementById('oPrice').value.trim();
   var oNote=document.getElementById('oNote').value.trim();
-  var price=oPrice||prod.price||'call for pricing';
+  var price=oPrice||(prod.price&&prod.price.length?prod.price:'');
 
   var panel=document.getElementById('panel');
   document.getElementById('emptyState').style.display='none';
@@ -480,7 +482,7 @@ async function generate() {
 }
 
 async function generateOne(prod,loc,price,oNote,idx,allLocNames,allLocs) {
-  var dimString=getUniqueDim(prod,idx);
+  var dimString=getUniqueDim(prod);
   var seed=Date.now()+idx*7919;
   var shuffledUses=shuffleArr(prod.useCases,seed);
   var uses=shuffledUses.slice(0,4);
@@ -496,7 +498,7 @@ async function generateOne(prod,loc,price,oNote,idx,allLocNames,allLocs) {
   var prompt='You are writing a Facebook Marketplace listing.\n\n'
     +'PRODUCT: '+prod.name+'\n'
     +'SKU: '+sku+'\n'
-    +'PRICE: '+price+'\n'
+    +'PRICE: '+(price||'message for pricing — no phone calls')+'\n'
     +'CONDITION: '+prod.condition+'\n'
     +'MATERIAL: '+prod.material+'\n'
     +(prod.brand?'BRAND: '+prod.brand+'\n':'')
@@ -517,6 +519,8 @@ async function generateOne(prod,loc,price,oNote,idx,allLocNames,allLocs) {
     +'- End with SKU on its own line: '+sku+'\n'
     +'- Total: 120-180 words. Tight. No filler.\n'
     +'- NEVER use: "Look no further", "Perfect for any", "Don\'t miss out", "Great deal", "You won\'t be disappointed", "Amazing", "Gorgeous"\n'
+    +'- NEVER say "Woodlawn" or "storage unit" in any listing\n'
+    +'- Pickup location for Baltimore listings: easy off I-695 and Security Blvd, Baltimore. Can also just say "west Baltimore" or give the address: 1701 Whitehead Rd, Baltimore MD 21207\n'
     +'- The EXACT dimension string must appear verbatim — do not rephrase it.\n'
     +'\nGROUP POST (separate, for Facebook buy/sell groups in '+loc.area+'):\n'
     +'Write 2-3 sentences. Casual but not desperate. Lead with what it is and the price. Include general pickup area naturally. End with soft CTA. Under 60 words.\n'
@@ -528,12 +532,7 @@ async function generateOne(prod,loc,price,oNote,idx,allLocNames,allLocs) {
 
   var res=await fetch('https://listing-forge.brett-2f8.workers.dev',{
     method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key':'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',
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
-    },
+    headers:{'Content-Type':'application/json'},
     body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:650,messages:[{role:'user',content:prompt}]})
   });
   var data=await res.json();
