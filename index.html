@@ -81,6 +81,9 @@ header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;
 .loading-txt{font-size:.72rem;color:var(--muted);}
 .timing-note{background:rgba(196,92,58,.08);border:1px solid rgba(196,92,58,.25);border-radius:7px;padding:11px 13px;font-size:.7rem;line-height:1.7;color:#e8a080;}
 .timing-note strong{color:var(--red);display:block;margin-bottom:3px;}
+.hdr-tab{background:transparent;border:1px solid var(--bdr);border-radius:4px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:.6rem;padding:4px 10px;cursor:pointer;transition:all .15s;}
+.hdr-tab:hover{border-color:var(--acc);color:var(--acc);}
+.hdr-tab.active{border-color:var(--acc);color:var(--acc);}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px;}
 </style>
 </head>
@@ -88,11 +91,14 @@ header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;
 <header>
   <div><div class="logo">ListingForge</div><div class="logo-sub">FB Marketplace Generator</div></div>
   <div class="hsp"></div>
+  <button class="hdr-tab" id="tabListings" onclick="showTab('listings')">Listings</button>
+  <button class="hdr-tab" id="tabWishlist" onclick="showTab('wishlist')">Wishlist</button>
+  <button class="hdr-tab" id="tabDebug" onclick="showTab('debug')">Debug</button>
 </header>
 <div class="layout">
 <div class="sb">
   <div class="ss">
-    <div class="slbl">Product</div>
+    <div class="slbl">Products <span style="font-size:.57rem;color:var(--dim);">select one or more</span></div>
     <div id="prodList"></div>
   </div>
   <div class="ss">
@@ -117,6 +123,20 @@ header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;
   </div>
   <div id="ra"></div>
 </div>
+</div>
+<!-- WISHLIST PANEL -->
+<div id="wishlistPanel" style="display:none;padding:20px;max-width:700px;margin:0 auto;">
+  <div style="display:flex;gap:8px;margin-bottom:16px;">
+    <input type="text" id="wishInput" placeholder="Add a feature idea or improvement…" style="flex:1;background:var(--bg);border:1px solid var(--bdr);border-radius:5px;padding:7px 9px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;font-size:.78rem;outline:none;" onkeydown="if(event.key==='Enter')addWish()">
+    <button onclick="addWish()" style="padding:7px 14px;background:var(--acc);color:#111009;border:none;border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:.65rem;cursor:pointer;font-weight:600;">Add</button>
+  </div>
+  <div id="wishList"></div>
+  <div style="margin-top:16px;"><button onclick="clearDoneWishes()" style="padding:4px 10px;background:transparent;border:1px solid var(--bdr);border-radius:4px;color:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:.58rem;cursor:pointer;">Clear Completed</button></div>
+</div>
+<!-- DEBUG PANEL -->
+<div id="debugPanel" style="display:none;padding:20px;max-width:700px;margin:0 auto;">
+  <div style="margin-bottom:12px;"><button onclick="clearDebugLog()" style="padding:4px 10px;background:transparent;border:1px solid var(--bdr);border-radius:4px;color:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:.58rem;cursor:pointer;">Clear Log</button></div>
+  <div id="debugList"><div style="color:var(--dim);font-size:.72rem;">No errors logged.</div></div>
 </div>
 
 <script>
@@ -431,8 +451,7 @@ function shuffleArr(arr,seed){
       +'<span class="prod-price">'+(p.priceEach||'price TBD')+'</span>'
       +'</div>';
     d.addEventListener('click',function(){
-      document.querySelectorAll('.prod-card').forEach(function(x){x.classList.remove('active');});
-      d.classList.add('active');
+      d.classList.toggle('active');
       updateLocSKUs();
       updBtn();
     });
@@ -503,11 +522,12 @@ function updateLocSKUs(){
     if(el) el.textContent=prod?buildSKU(prod,loc):'--';
   });
 }
-function getActiveProd(){
-  var el=document.querySelector('.prod-card.active');
-  if(!el)return null;
-  return PRODUCTS.find(function(p){return p.id===el.dataset.id;});
+function getActiveProds(){
+  return Array.from(document.querySelectorAll('.prod-card.active')).map(function(el){
+    return PRODUCTS.find(function(p){return p.id===el.dataset.id;});
+  });
 }
+function getActiveProd(){var p=getActiveProds();return p.length?p[0]:null;}
 function getChkLocs(){
   return Array.from(document.querySelectorAll('.loc-item.chk')).map(function(el){
     return LOCATIONS.find(function(l){return l.id===el.dataset.id;});
@@ -515,14 +535,15 @@ function getChkLocs(){
 }
 function updBtn(){
   var btn=document.getElementById('genBtn');
-  btn.disabled=!(getActiveProd()&&getChkLocs().length>0);
+  btn.disabled=!(getActiveProds().length>0&&getChkLocs().length>0);
   if(!btn.disabled) btn.textContent='Generate Listings →';
 }
 
 // ── GENERATE ─────────────────────────────────────────────────────────────────
 async function generate(){
-  var prod=getActiveProd(), locs=getChkLocs();
-  if(!prod||!locs.length) return;
+  var prods=getActiveProds(), locs=getChkLocs();
+  if(!prods.length||!locs.length) return;
+  var prod=prods[0]; // used below; multi-product handled by outer loop
   var btn=document.getElementById('genBtn');
   btn.disabled=true; btn.textContent='Generating…';
   var oNote=document.getElementById('oNote').value.trim();
@@ -540,25 +561,31 @@ async function generate(){
   }
 
   var allLocNames=locs.map(function(l){return l.name;}).join(', ');
-  var cards=locs.map(function(loc,i){
+  // Build job list: every product × every location
+  var jobs=[];
+  prods.forEach(function(p){locs.forEach(function(l){jobs.push({prod:p,loc:l});});});
+
+  var cards=jobs.map(function(job,i){
     var card=document.createElement('div');
     card.className='loading-card';
-    card.innerHTML='<div class="spinner"></div><div class="loading-txt">'+(i===0?'Generating '+loc.name+'…':'Queued: '+loc.name+'…')+'</div>';
+    var label=job.prod.code+' — '+job.loc.name;
+    card.innerHTML='<div class="spinner"></div><div class="loading-txt">'+(i===0?'Generating '+label+'…':'Queued: '+label+'…')+'</div>';
     ra.appendChild(card);
     return card;
   });
 
   (async function(){
-    for(var idx=0;idx<locs.length;idx++){
-      var loc=locs[idx];
+    for(var idx=0;idx<jobs.length;idx++){
+      var job=jobs[idx];
       try{
-        var result=await generateOne(prod,loc,oNote,idx,allLocNames,locs);
+        var result=await generateOne(job.prod,job.loc,oNote,idx,allLocNames,locs);
         var newCard=buildCard(result);
         ra.replaceChild(newCard,cards[idx]);
       }catch(err){
-        cards[idx].innerHTML='<div style="color:var(--red);font-size:.73rem;padding:4px;">Failed for '+loc.name+': '+err.message+'</div>';
+        logDebug('Failed: '+job.prod.code+' / '+job.loc.name+' — '+err.message);
+        cards[idx].innerHTML='<div style="color:var(--red);font-size:.73rem;padding:4px;">Failed for '+job.prod.code+' / '+job.loc.name+': '+err.message+'</div>';
       }
-      if(idx<locs.length-1) await new Promise(function(r){setTimeout(r,1100);});
+      if(idx<jobs.length-1) await new Promise(function(r){setTimeout(r,1100);});
     }
     btn.disabled=false;
     btn.textContent='Generate Listings →';
@@ -691,6 +718,81 @@ function buildCard(r){
   });
   return card;
 }
+
+// ── TAB SWITCHING ────────────────────────────────────────────────────────────
+function showTab(tab){
+  document.querySelector('.layout').style.display=tab==='listings'?'grid':'none';
+  document.getElementById('wishlistPanel').style.display=tab==='wishlist'?'block':'none';
+  document.getElementById('debugPanel').style.display=tab==='debug'?'block':'none';
+  document.querySelectorAll('.hdr-tab').forEach(function(b){b.classList.remove('active');});
+  var map={listings:'tabListings',wishlist:'tabWishlist',debug:'tabDebug'};
+  document.getElementById(map[tab]).classList.add('active');
+  if(tab==='wishlist') renderWishes();
+  if(tab==='debug') renderDebugLog();
+}
+
+// ── WISHLIST ──────────────────────────────────────────────────────────────────
+function getWishes(){try{return JSON.parse(localStorage.getItem('lf_wishes')||'[]');}catch(e){return[];}}
+function saveWishes(w){localStorage.setItem('lf_wishes',JSON.stringify(w));}
+function addWish(){
+  var inp=document.getElementById('wishInput');
+  var txt=inp.value.trim();
+  if(!txt)return;
+  var w=getWishes();
+  w.unshift({id:Date.now(),text:txt,done:false,ts:new Date().toLocaleDateString()});
+  saveWishes(w);
+  inp.value='';
+  renderWishes();
+}
+function toggleWish(id){
+  var w=getWishes().map(function(x){return x.id===id?Object.assign({},x,{done:!x.done}):x;});
+  saveWishes(w);
+  renderWishes();
+}
+function clearDoneWishes(){
+  saveWishes(getWishes().filter(function(x){return !x.done;}));
+  renderWishes();
+}
+function renderWishes(){
+  var el=document.getElementById('wishList');
+  if(!el)return;
+  var w=getWishes();
+  if(!w.length){el.innerHTML='<div style="color:var(--dim);font-size:.72rem;">No items yet. Add a feature idea above.</div>';return;}
+  el.innerHTML=w.map(function(item){
+    return '<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surf);border:1px solid var(--bdr);border-radius:7px;margin-bottom:6px;">'
+      +'<div onclick="toggleWish('+item.id+')" style="width:14px;height:14px;border:1px solid '+(item.done?'var(--grn)':'var(--bdr)')+';border-radius:3px;flex-shrink:0;cursor:pointer;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.6rem;color:var(--grn);background:'+(item.done?'rgba(90,158,114,.15)':'transparent')+';">'+(item.done?'✓':'')+'</div>'
+      +'<div style="flex:1;">'
+      +'<div style="font-size:.78rem;'+(item.done?'text-decoration:line-through;color:var(--dim);':'')+'">'+escH(item.text)+'</div>'
+      +'<div style="font-size:.57rem;color:var(--dim);margin-top:3px;">'+item.ts+'</div>'
+      +'</div></div>';
+  }).join('');
+}
+
+// ── DEBUG LOG ─────────────────────────────────────────────────────────────────
+function getDebugLog(){try{return JSON.parse(localStorage.getItem('lf_debug')||'[]');}catch(e){return[];}}
+function saveDebugLog(l){localStorage.setItem('lf_debug',JSON.stringify(l));}
+function logDebug(msg){
+  var l=getDebugLog();
+  l.unshift({msg:msg,ts:new Date().toLocaleString()});
+  if(l.length>50)l=l.slice(0,50);
+  saveDebugLog(l);
+}
+function clearDebugLog(){saveDebugLog([]);renderDebugLog();}
+function renderDebugLog(){
+  var el=document.getElementById('debugList');
+  if(!el)return;
+  var l=getDebugLog();
+  if(!l.length){el.innerHTML='<div style="color:var(--dim);font-size:.72rem;">No errors logged.</div>';return;}
+  el.innerHTML=l.map(function(e){
+    return '<div style="padding:9px 12px;background:var(--surf);border:1px solid rgba(196,92,58,.3);border-radius:6px;margin-bottom:6px;">'
+      +'<div style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--red);">'+escH(e.msg)+'</div>'
+      +'<div style="font-size:.57rem;color:var(--dim);margin-top:3px;">'+e.ts+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+// init active tab
+(function(){document.getElementById('tabListings').classList.add('active');})();
 
 function escH(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 </script>
