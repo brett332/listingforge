@@ -540,10 +540,10 @@ async function generate(){
   }
 
   var allLocNames=locs.map(function(l){return l.name;}).join(', ');
-  var cards=locs.map(function(loc){
+  var cards=locs.map(function(loc,i){
     var card=document.createElement('div');
     card.className='loading-card';
-    card.innerHTML='<div class="spinner"></div><div class="loading-txt">'+(idx===0?'Generating '+loc.name+'…':'Queued: '+loc.name+'…')+'</div>';
+    card.innerHTML='<div class="spinner"></div><div class="loading-txt">'+(i===0?'Generating '+loc.name+'…':'Queued: '+loc.name+'…')+'</div>';
     ra.appendChild(card);
     return card;
   });
