@@ -543,24 +543,26 @@ async function generate(){
   var cards=locs.map(function(loc){
     var card=document.createElement('div');
     card.className='loading-card';
-    card.innerHTML='<div class="spinner"></div><div class="loading-txt">Generating '+loc.name+'…</div>';
+    card.innerHTML='<div class="spinner"></div><div class="loading-txt">'+(idx===0?'Generating '+loc.name+'…':'Queued: '+loc.name+'…')+'</div>';
     ra.appendChild(card);
     return card;
   });
 
-  var promises=locs.map(function(loc,idx){
-    return generateOne(prod,loc,oNote,idx,allLocNames,locs).then(function(result){
-      var newCard=buildCard(result);
-      ra.replaceChild(newCard,cards[idx]);
-    }).catch(function(err){
-      cards[idx].innerHTML='<div style="color:var(--red);font-size:.73rem;padding:4px;">Failed for '+loc.name+': '+err.message+'</div>';
-    });
-  });
-
-  Promise.all(promises).then(function(){
+  (async function(){
+    for(var idx=0;idx<locs.length;idx++){
+      var loc=locs[idx];
+      try{
+        var result=await generateOne(prod,loc,oNote,idx,allLocNames,locs);
+        var newCard=buildCard(result);
+        ra.replaceChild(newCard,cards[idx]);
+      }catch(err){
+        cards[idx].innerHTML='<div style="color:var(--red);font-size:.73rem;padding:4px;">Failed for '+loc.name+': '+err.message+'</div>';
+      }
+      if(idx<locs.length-1) await new Promise(function(r){setTimeout(r,1100);});
+    }
     btn.disabled=false;
     btn.textContent='Generate Listings →';
-  });
+  })();
 }
 
 async function generateOne(prod,loc,oNote,idx,allLocNames,allLocs){
