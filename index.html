@@ -127,7 +127,7 @@ header{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 24px;
 <!-- WISHLIST PANEL -->
 <div id="wishlistPanel" style="display:none;padding:20px;max-width:700px;margin:0 auto;">
   <div style="display:flex;gap:8px;margin-bottom:16px;">
-    <input type="text" id="wishInput" placeholder="Add a feature idea or improvement…" style="flex:1;background:var(--bg);border:1px solid var(--bdr);border-radius:5px;padding:7px 9px;color:var(--txt);font-family:'IBM Plex Sans',sans-serif;font-size:.78rem;outline:none;" onkeydown="if(event.key==='Enter')addWish()">
+    <input type="text" id="wishInput" placeholder="Add a feature idea or improvement…" style="flex:1;background:var(--bg);border:1px solid var(--bdr);border-radius:5px;padding:7px 9px;color:var(--txt);font-size:.78rem;outline:none;" onkeydown="if(event.key==='Enter')addWish()">
     <button onclick="addWish()" style="padding:7px 14px;background:var(--acc);color:#111009;border:none;border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:.65rem;cursor:pointer;font-weight:600;">Add</button>
   </div>
   <div id="wishList"></div>
@@ -785,7 +785,7 @@ function renderDebugLog(){
   if(!l.length){el.innerHTML='<div style="color:var(--dim);font-size:.72rem;">No errors logged.</div>';return;}
   el.innerHTML=l.map(function(e){
     return '<div style="padding:9px 12px;background:var(--surf);border:1px solid rgba(196,92,58,.3);border-radius:6px;margin-bottom:6px;">'
-      +'<div style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--red);">'+escH(e.msg)+'</div>'
+      +'<div style="font-family:monospace;font-size:.68rem;color:var(--red);">'+escH(e.msg)+'</div>'
       +'<div style="font-size:.57rem;color:var(--dim);margin-top:3px;">'+e.ts+'</div>'
       +'</div>';
   }).join('');
